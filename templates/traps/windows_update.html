@@ -1,0 +1,239 @@
+<!-- Windows Update Fullscreen Trap -->
+<!-- 
+    OPSEC NOTES:
+    - Uses Fullscreen API for maximum immersion
+    - Mimics authentic Windows Update screen
+    - Requires user interaction (click) to trigger fullscreen (browser security requirement)
+    - Payload is copied to clipboard on initial interaction
+    - Progress bar creates urgency and maintains illusion
+-->
+
+<!-- Initial Trigger Overlay - Prompts user to click to "continue update" -->
+<div id="wu-trigger-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0078D4; z-index: 9998; display: flex; justify-content: center; align-items: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; cursor: pointer;" onclick="enterFullscreenAndTrigger()">
+    <div style="text-align: center; color: white;">
+        <div style="margin-bottom: 30px;">
+            <!-- Windows Logo SVG -->
+            <svg width="88" height="88" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 12.5L35.7 7.5V42.1H0V12.5Z" fill="white"/>
+                <path d="M40 6.9L87.3 0V42.1H40V6.9Z" fill="white"/>
+                <path d="M0 45.9H35.7V80.5L0 75.5V45.9Z" fill="white"/>
+                <path d="M40 45.9H87.3V88L40 81.1V45.9Z" fill="white"/>
+            </svg>
+        </div>
+        <h1 style="font-size: 28px; font-weight: 300; margin-bottom: 15px;">Windows Update</h1>
+        <p style="font-size: 16px; font-weight: 300; opacity: 0.9;">Click anywhere to continue the update process</p>
+        <div style="margin-top: 30px;">
+            <div class="wu-loading-dots">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Fullscreen Windows Update Screen -->
+<div id="wu-fullscreen-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0078D4; z-index: 9999; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; justify-content: center; align-items: center;">
+    
+    <!-- Main Update Content -->
+    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; color: white; text-align: center; padding: 20px; box-sizing: border-box;">
+        
+        <!-- Spinning Circle Progress -->
+        <div id="wu-spinner" style="margin-bottom: 40px;">
+            <svg width="120" height="120" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="4"/>
+                <circle id="wu-progress-circle" cx="60" cy="60" r="54" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-dasharray="339.292" stroke-dashoffset="16.96" transform="rotate(-90 60 60)" style="transition: stroke-dashoffset 0.5s ease;"/>
+                <text x="60" y="65" text-anchor="middle" fill="white" font-size="24" font-weight="300" id="wu-percent-text">95%</text>
+            </svg>
+        </div>
+        
+        <!-- Status Text -->
+        <h1 style="font-size: 32px; font-weight: 300; margin-bottom: 10px;">Working on updates.</h1>
+        <p style="font-size: 18px; font-weight: 300; opacity: 0.9; margin-bottom: 5px;">Please do not turn off your computer.</p>
+        <p style="font-size: 16px; font-weight: 300; opacity: 0.8; margin-bottom: 5px;" id="wu-part-text">Part 3 of 3: Check security</p>
+        <p style="font-size: 16px; font-weight: 300; opacity: 0.8;" id="wu-complete-text">95% complete</p>
+        
+        <!-- Attention Box with Instructions -->
+        <div id="wu-attention-box" style="margin-top: 50px; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 25px 40px; max-width: 500px;">
+            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 15px; color: #FFD700;">Attention!</h2>
+            <p style="font-size: 14px; font-weight: 300; margin-bottom: 20px; opacity: 0.9;">To complete the update, install<br>the critical Security Update</p>
+            
+            <div style="text-align: left;">
+                <div style="margin-bottom: 12px; display: flex; align-items: center;">
+                    <span style="font-weight: 600; margin-right: 10px;">Step 1 -</span>
+                    <span>Hold "<span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 3px; font-family: 'Segoe UI Symbol', sans-serif;">⊞</span>" Press "<span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 3px;">R</span>"</span>
+                </div>
+                <div style="margin-bottom: 12px; display: flex; align-items: center;">
+                    <span style="font-weight: 600; margin-right: 10px;">Step 2 -</span>
+                    <span>Hold "<span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 3px;">Ctrl</span>" Press "<span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 3px;">V</span>"</span>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <span style="font-weight: 600; margin-right: 10px;">Step 3 -</span>
+                    <span>Press "<span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 3px;">OK</span>" or "<span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 3px;">Enter</span>"</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Hidden Exit Button (appears after timeout or ESC key) -->
+        <button id="wu-exit-btn" type="button" onclick="exitFullscreenAndRedirect()" style="display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 12px 30px; border-radius: 4px; font-size: 14px; cursor: pointer; font-family: 'Segoe UI', sans-serif; text-transform: uppercase; font-weight: 500; letter-spacing: 0.5px;">
+            I have completed these steps
+        </button>
+    </div>
+</div>
+
+<style>
+/* Loading dots animation */
+.wu-loading-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.wu-loading-dots span {
+    width: 10px;
+    height: 10px;
+    background: white;
+    border-radius: 50%;
+    animation: wu-dot-pulse 1.4s infinite ease-in-out both;
+}
+
+.wu-loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+.wu-loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+.wu-loading-dots span:nth-child(3) { animation-delay: 0s; }
+
+@keyframes wu-dot-pulse {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
+/* Prevent text selection for realism */
+#wu-fullscreen-overlay, #wu-trigger-overlay {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Hide scrollbars when fullscreen */
+body.wu-fullscreen-active {
+    overflow: hidden !important;
+}
+
+/* Smooth transitions */
+#wu-attention-box {
+    animation: wu-fade-in 0.5s ease-out;
+}
+
+@keyframes wu-fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+<script>
+let wuProgressInterval = null;
+let wuExitTimeout = null;
+
+function enterFullscreenAndTrigger() {
+    const fullscreenElement = document.getElementById('wu-fullscreen-overlay');
+    const triggerOverlay = document.getElementById('wu-trigger-overlay');
+    
+    const trackEndpoint = {{ track_endpoint|default('/track/click')|tojson }};
+    const payload = {{ payload|tojson }};
+    const userId = {{ user_id|tojson }};
+
+    ClickFix.trigger(payload, userId, trackEndpoint, function() {
+        triggerOverlay.style.display = 'none';
+        fullscreenElement.style.display = 'flex';
+        fullscreenElement.style.justifyContent = 'center';
+        fullscreenElement.style.alignItems = 'center';
+        
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(err => {
+                // Fullscreen request denied, continuing in windowed mode
+            });
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+        }
+        
+        document.body.classList.add('wu-fullscreen-active');
+        startWuProgress();
+        
+        // Delay exit button to give user time to follow instructions
+        wuExitTimeout = setTimeout(function() {
+            document.getElementById('wu-exit-btn').style.display = 'block';
+        }, 10000);
+
+    }, function(err) {
+        triggerOverlay.style.display = 'none';
+        fullscreenElement.style.display = 'flex';
+        fullscreenElement.style.justifyContent = 'center';
+        fullscreenElement.style.alignItems = 'center';
+        startWuProgress();
+    });
+}
+
+function startWuProgress() {
+    const circle = document.getElementById('wu-progress-circle');
+    const percentText = document.getElementById('wu-percent-text');
+    const completeText = document.getElementById('wu-complete-text');
+    const partText = document.getElementById('wu-part-text');
+    
+    const circumference = 339.292; // 2 * PI * r (r=54)
+    let percent = 95;
+    
+    wuProgressInterval = setInterval(function() {
+        if (percent < 99) {
+            percent += 0.1;
+            const offset = circumference - (percent / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            percentText.textContent = Math.floor(percent) + '%';
+            completeText.textContent = Math.floor(percent) + '% complete';
+            
+            if (percent > 97) {
+                partText.textContent = 'Part 3 of 3: Finalizing security check';
+            }
+        } else {
+            clearInterval(wuProgressInterval);
+            partText.textContent = 'Part 3 of 3: Waiting for user action...';
+        }
+    }, 500);
+}
+
+function exitFullscreenAndRedirect() {
+    if (wuProgressInterval) clearInterval(wuProgressInterval);
+    if (wuExitTimeout) clearTimeout(wuExitTimeout);
+    
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
+    
+    document.body.classList.remove('wu-fullscreen-active');
+    window.location.assign('/training');
+}
+
+// ESC key shows exit button for panicked users
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.getElementById('wu-exit-btn').style.display = 'block';
+    }
+});
+
+// Show exit button if user manually exits fullscreen
+document.addEventListener('fullscreenchange', function() {
+    if (!document.fullscreenElement) {
+        document.getElementById('wu-exit-btn').style.display = 'block';
+    }
+});
+
+document.addEventListener('webkitfullscreenchange', function() {
+    if (!document.webkitFullscreenElement) {
+        document.getElementById('wu-exit-btn').style.display = 'block';
+    }
+});
+</script>

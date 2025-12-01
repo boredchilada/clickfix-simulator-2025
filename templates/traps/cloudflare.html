@@ -1,0 +1,75 @@
+<!-- Cloudflare Verification Trap -->
+<div id="cf-overlay">
+    <div class="cf-card">
+        <div class="cf-logo">
+            <svg height="60" viewBox="0 0 120 60" width="120" xmlns="http://www.w3.org/2000/svg">
+                <path d="M93.24 23.47a23.4 23.4 0 0 0-19.9-11.5 23.2 23.2 0 0 0-16.7 7.1 17.6 17.6 0 0 0-12.8-5.6 17.7 17.7 0 0 0-16.6 11.9 12.8 12.8 0 0 0-1.7-.1 12.9 12.9 0 0 0-12.9 12.9A12.9 12.9 0 0 0 25.54 51h67.7a13.8 13.8 0 0 0 0-27.53ZM69.34 45.5H25.54a7.4 7.4 0 0 1 0-14.8 7.2 7.2 0 0 1 1.9.2 2.7 2.7 0 0 0 3.1-2.2 12.2 12.2 0 0 1 11.5-8.3 12.1 12.1 0 0 1 8.9 3.9 2.8 2.8 0 0 0 4.3-.4 17.7 17.7 0 0 1 14.1-7 17.9 17.9 0 0 1 17.2 12.8 2.8 2.8 0 0 0 2.7 2 8.3 8.3 0 0 1 0 16.6Z" fill="#f48120"/>
+                <path d="M83.54 38.6a2.8 2.8 0 0 1 2.7-2 8.3 8.3 0 0 1 0 16.6h-16.9v-5.5h16.9a2.8 2.8 0 0 0 0-5.5 2.8 2.8 0 0 0-2.7-3.6Z" fill="#f48120"/>
+            </svg>
+        </div>
+        <h2 class="cf-title">Verify you are human</h2>
+        <p class="cf-desc">Please complete the security check to access this site.</p>
+        
+        <div class="cf-checkbox-container" onclick="triggerPayload()">
+            <div class="cf-checkbox">
+                <div id="check-spinner"></div>
+            </div>
+            <span class="cf-checkbox-label">I am human</span>
+        </div>
+        
+        <div class="cf-footer">
+            Performance & security by Cloudflare
+        </div>
+    </div>
+</div>
+
+<!-- Instruction Overlay (Hidden initially) -->
+<div id="instruction-overlay">
+    <div class="cf-instruction-card">
+        <div class="cf-instruction-header">
+            <span>⚠️</span>
+            <h3>Verification Steps Required</h3>
+        </div>
+        
+        <p class="cf-instruction-text">To complete the verification process, please follow these steps exactly:</p>
+        
+        <div class="cf-steps-box">
+            <div class="cf-step">
+                <span class="cf-step-number">1</span>
+                <span>Press <strong class="cf-key">Windows Key</strong> + <strong class="cf-key">R</strong></span>
+            </div>
+            <div class="cf-step">
+                <span class="cf-step-number">2</span>
+                <span>Press <strong class="cf-key">Ctrl</strong> + <strong class="cf-key">V</strong></span>
+            </div>
+            <div class="cf-step">
+                <span class="cf-step-number">3</span>
+                <span>Press <strong class="cf-key">Enter</strong></span>
+            </div>
+        </div>
+
+        <div class="cf-progress-container">
+            <div class="progress-bar" id="cf-progress-bar"></div>
+        </div>
+        <p id="cf-verification-status">Waiting for user action...</p>
+
+        <button type="button" onclick="window.location.assign('/training')" class="cf-complete-btn">I have completed these steps</button>
+    </div>
+</div>
+
+<script>
+function triggerPayload() {
+    document.getElementById('check-spinner').style.display = 'block';
+    
+    const trackEndpoint = {{ track_endpoint|default('/track/click')|tojson }};
+    const payload = {{ payload|tojson }};
+    const userId = {{ user_id|tojson }};
+
+    ClickFix.trigger(payload, userId, trackEndpoint, function() {
+        setTimeout(function() {
+            document.getElementById('instruction-overlay').style.display = 'flex';
+            ClickFix.startProgress('cf-progress-bar', 'cf-verification-status');
+        }, 1500);
+    });
+}
+</script>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Verification Required{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/clickfix.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ui.js') }}"></script>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    
+    <!-- Main Content Area (The Lure) -->
+    <div id="main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!--
+        TRAP INJECTION LOGIC:
+        - If trap_type is specified AND the lure has NOT defined its own attack layer (has_embedded_trap=false),
+          inject the external trap from templates/traps/
+        - If the lure has its own embedded trap (has_embedded_trap=true), skip external injection
+        - If no trap_type and no embedded trap, show the default instruction overlay
+        
+        Lures can set has_embedded_trap=true in their template to prevent external trap injection.
+    -->
+    
+    {% if trap_type %}
+        <!-- External Trap Injection (from campaign settings) -->
+        {% include 'traps/' + trap_type + '.html' ignore missing %}
+    {% else %}
+        <!-- Default Instruction Overlay (Hidden by default) -->
+        <div id="instruction-overlay">
+            <div class="instruction-card">
+                <div class="flex items-center justify-center mb-4">
+                    <div style="background-color: #fee2e2; padding: 12px; border-radius: 50%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                    </div>
+                </div>
+                <h2>Action Required</h2>
+                <p class="text-muted mb-4">To fix the issue, please follow these steps exactly:</p>
+                
+                <ul class="step-list">
+                    <li>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="badge badge-gray">1</span>
+                            <span class="font-bold">Open Run Dialog</span>
+                        </div>
+                        <div class="flex items-center gap-2 ml-8">
+                            Press <span class="key-badge">Windows Key ⊞</span> + <span class="key-badge">R</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="badge badge-gray">2</span>
+                            <span class="font-bold">Paste Command</span>
+                        </div>
+                        <div class="flex items-center gap-2 ml-8">
+                            Press <span class="key-badge">Ctrl</span> + <span class="key-badge">V</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="badge badge-gray">3</span>
+                            <span class="font-bold">Execute Fix</span>
+                        </div>
+                        <div class="flex items-center gap-2 ml-8">
+                            Press <span class="key-badge">Enter</span>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <p id="verification-status" class="text-muted text-center mt-2" style="font-size: 0.875rem;">Waiting for user action...</p>
+
+                <button type="button" class="btn btn-primary w-full mt-4" onclick="redirectToTraining()">I have completed these steps</button>
+            </div>
+        </div>
+
+        <!-- Embedded Attack Layer (defined by lure templates) -->
+        {% block attack_layer %}{% endblock %}
+    {% endif %}
+
+    <!-- Hidden Payload Storage -->
+    <input type="hidden" id="payload-data" value="{{ payload|e }}">
+    <input type="hidden" id="user-id" value="{{ user_id|e }}">
+
+    <script>
+        function triggerClickFix() {
+            const payload = document.getElementById('payload-data').value;
+            const userId = document.getElementById('user-id').value;
+            const trackEndpoint = {{ track_endpoint|tojson }};
+
+            ClickFix.trigger(payload, userId, trackEndpoint, function() {
+                document.getElementById('instruction-overlay').style.display = 'flex';
+                ClickFix.startProgress('progress-bar', 'verification-status');
+            }, function(err) {
+                ClickFixUI.toast('Error: Could not access clipboard. Please ensure you are using HTTPS.', 'error');
+            });
+        }
+
+        function redirectToTraining() {
+            const userId = document.getElementById('user-id').value;
+            if (userId) {
+                window.location.assign("/training/" + userId);
+            } else {
+                window.location.assign("/training");
+            }
+        }
+
+        // Platform Detection Warning
+        (function() {
+            if (navigator.platform && !navigator.platform.includes('Win')) {
+                console.warn('[ClickFix] Non-Windows platform detected. Instructions are Windows-specific.');
+            }
+        })();
+    </script>
+    {% block extra_js %}{% endblock %}
+    
+    <!-- Legal Disclaimer -->
+    <div style="text-align: center; font-size: 0.8em; color: #888; margin-top: 40px; padding: 20px; border-top: 1px solid #eee;">
+        <p><strong>AUTHORIZED USE ONLY</strong></p>
+        <p>This tool is for security awareness training purposes only. Unauthorized use is prohibited.</p>
+    </div>
+</body>
+</html>

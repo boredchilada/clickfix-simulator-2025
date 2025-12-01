@@ -1,0 +1,156 @@
+{% extends "base_layout.html" %}
+
+{% block title %}Security Awareness Training{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/training.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="training-wrapper">
+    <div class="training-container" id="trainingContainer">
+        
+        <!-- SECTION 1: HERO (The Reveal) -->
+        <section class="training-section section-hero" data-training-section="TRAINING_SECTION_1">
+            <div class="training-card">
+                <div class="hero-icon">🛑</div>
+                <h1 class="training-title">This Was a <span class="highlight-red">Security Test</span></h1>
+                <p class="training-subtitle">
+                    Don't worry, no malicious code was executed.<br>
+                    You just fell for a simulated <strong>"ClickFix"</strong> social engineering attack.
+                </p>
+                
+                <div class="scroll-hint">
+                    <p>Scroll to learn what happened</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: THE MECHANISM (What Happened) -->
+        <section class="training-section section-steps" data-training-section="TRAINING_SECTION_2">
+            <div class="training-card">
+                <h2 class="training-title" style="font-size: 2.5rem;">How It Happened</h2>
+                <p class="training-subtitle">
+                    You were tricked into manually bypassing security protections.
+                </p>
+                
+                <div class="step-grid">
+                    <div class="step-item">
+                        <span class="step-number">01</span>
+                        <div class="step-title">The Lure</div>
+                        <p class="step-desc">A fake error message (like "Update Chrome" or "Fix Teams") asked for immediate action.</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-number">02</span>
+                        <div class="step-title">The Trap</div>
+                        <p class="step-desc">You were asked to open the "Run" dialog (Win+R) and paste a command.</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-number">03</span>
+                        <div class="step-title">The Execution</div>
+                        <p class="step-desc">By pressing Enter, you ran a script directly on your computer, bypassing browser safety.</p>
+                    </div>
+                </div>
+
+                <div class="scroll-hint">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: THE DANGER (Why it works) -->
+        <section class="training-section section-warning" data-training-section="TRAINING_SECTION_3">
+            <div class="training-card">
+                <h2 class="training-title" style="font-size: 2.5rem;">Why is this <span class="highlight-red">Dangerous?</span></h2>
+                <p class="training-subtitle">
+                    The "Run" dialog is a powerful administrator tool.
+                </p>
+                
+                <div class="tech-diagram">
+                    <div class="diagram-node">Browser Security</div>
+                    <div style="font-size: 1.5rem;">🚫</div>
+                    <div class="diagram-node" style="border: 2px solid var(--accent-red); background: #fef2f2;">You Bypassed It</div>
+                    <div style="font-size: 1.5rem;">➡️</div>
+                    <div class="diagram-node">System Access</div>
+                </div>
+
+                <p style="font-size: 1.1rem; color: #475569; max-width: 600px; margin: 0 auto;">
+                    Antivirus software often trusts actions performed manually by the user. Attackers use this to slip past defenses.
+                </p>
+
+                <div class="scroll-hint">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: TAKEAWAYS (Completion) -->
+        <section class="training-section section-complete" data-training-section="TRAINING_COMPLETED">
+            <div class="training-card">
+                <h2 class="training-title" style="font-size: 2.5rem; color: var(--color-primary);">Key Takeaways</h2>
+                
+                <div class="takeaway-list">
+                    <div class="takeaway-item">
+                        <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        <div>
+                            <strong>Never Paste Commands</strong>
+                            <div class="text-muted text-sm">Do not paste code into the Run dialog or Terminal unless you wrote it yourself.</div>
+                        </div>
+                    </div>
+                    <div class="takeaway-item">
+                        <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        <div>
+                            <strong>Verify the Source</strong>
+                            <div class="text-muted text-sm">Legitimate IT support will rarely ask you to run cryptic PowerShell commands.</div>
+                        </div>
+                    </div>
+                    <div class="takeaway-item">
+                        <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        <div>
+                            <strong>Report Suspicious Activity</strong>
+                            <div class="text-muted text-sm">If a website asks you to "fix" something manually, report it.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="completeBtn" class="btn-complete">
+                    I Understand
+                </button>
+                
+                <p id="completionMsg" class="hidden" style="margin-top: 2rem; color: var(--color-success); font-weight: 700; font-size: 1.25rem;">
+                    ✓ Training Completed
+                </p>
+                
+                <p class="text-muted" style="margin-top: 3rem; font-size: 0.875rem; font-style: italic;">
+                    Simulation provided by the Security Awareness Team
+                </p>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/training.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize tracker
+        const userId = '{{ user_id if user_id else "" }}';
+        TrainingTracker.init(userId);
+        
+        // Handle completion button
+        const btn = document.getElementById('completeBtn');
+        const msg = document.getElementById('completionMsg');
+        
+        if(btn) {
+            btn.addEventListener('click', function() {
+                TrainingTracker.complete();
+                btn.style.display = 'none';
+                msg.classList.remove('hidden');
+                
+                // Optional: Confetti or celebration here
+            });
+        }
+    });
+</script>
+{% endblock %}

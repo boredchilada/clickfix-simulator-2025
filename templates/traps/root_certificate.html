@@ -1,0 +1,99 @@
+<!-- Root Certificate Trap -->
+<!-- 
+    Mimics a browser "Connection Not Private" error but offers a "Fix" button.
+    This exploits the user's desire to get past the warning screen.
+-->
+<div id="cert-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #d93025; z-index: 9999; display: flex; justify-content: center; align-items: center; font-family: 'Segoe UI', Tahoma, sans-serif; color: white;">
+    <div style="max-width: 600px; width: 90%; padding: 40px;">
+        <div style="margin-bottom: 20px;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="white">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+        </div>
+        
+        <h1 style="font-size: 24px; font-weight: 500; margin-bottom: 16px;">Your connection is not private</h1>
+        
+        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 20px; opacity: 0.9;">
+            Attackers might be trying to steal your information from <strong>internal-portal.corp</strong> (for example, passwords, messages, or credit cards).
+        </p>
+        
+        <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 4px; margin-bottom: 30px; font-size: 13px; border-left: 4px solid rgba(255,255,255,0.5);">
+            <strong>NET::ERR_CERT_AUTHORITY_INVALID</strong>
+            <p style="margin: 8px 0 0 0; opacity: 0.8;">The root certificate for this organization has expired. You must update your local certificate store to continue.</p>
+        </div>
+
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <button onclick="triggerCertPayload()" style="background: white; color: #d93025; border: none; padding: 10px 24px; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.background='#f1f1f1'" onmouseout="this.style.background='white'">
+                Install Root Certificate
+            </button>
+            <button style="background: transparent; color: white; border: 1px solid rgba(255,255,255,0.5); padding: 10px 24px; border-radius: 4px; font-weight: 500; cursor: pointer; font-size: 14px;" onclick="ClickFixUI.toast('This option is disabled by your administrator.', 'warning')">
+                Advanced
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Instruction Overlay (Hidden initially) -->
+<div id="cert-instruction-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(32, 33, 36, 0.98); z-index: 10000; justify-content: center; align-items: center; font-family: 'Segoe UI', sans-serif;">
+    <div style="background: #292a2d; color: #e8eaed; padding: 30px; border-radius: 8px; max-width: 500px; width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid #3f4042;">
+        <div style="display: flex; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #3f4042; padding-bottom: 15px;">
+            <span style="font-size: 24px; margin-right: 12px;">🛡️</span>
+            <h3 style="margin: 0; font-size: 18px; font-weight: 500;">Certificate Installation</h3>
+        </div>
+        
+        <p style="color: #9aa0a6; margin-bottom: 20px; font-size: 14px;">To restore secure connectivity, please install the updated root certificate:</p>
+        
+        <div style="background: #202124; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #3f4042;">
+            <div style="margin-bottom: 15px; display: flex; align-items: center;">
+                <span style="background: #8ab4f8; color: #202124; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold; font-size: 13px;">1</span>
+                <span style="font-size: 14px;">Press <strong style="color: #e8eaed; border: 1px solid #5f6368; padding: 2px 6px; border-radius: 4px; background: #303134;">Windows Key</strong> + <strong style="color: #e8eaed; border: 1px solid #5f6368; padding: 2px 6px; border-radius: 4px; background: #303134;">R</strong></span>
+            </div>
+            <div style="margin-bottom: 15px; display: flex; align-items: center;">
+                <span style="background: #8ab4f8; color: #202124; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold; font-size: 13px;">2</span>
+                <span style="font-size: 14px;">Press <strong style="color: #e8eaed; border: 1px solid #5f6368; padding: 2px 6px; border-radius: 4px; background: #303134;">Ctrl</strong> + <strong style="color: #e8eaed; border: 1px solid #5f6368; padding: 2px 6px; border-radius: 4px; background: #303134;">V</strong></span>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <span style="background: #8ab4f8; color: #202124; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold; font-size: 13px;">3</span>
+                <span style="font-size: 14px;">Press <strong style="color: #e8eaed; border: 1px solid #5f6368; padding: 2px 6px; border-radius: 4px; background: #303134;">Enter</strong></span>
+            </div>
+        </div>
+
+        <div class="progress-bar-container" style="width: 100%; background-color: #3f4042; border-radius: 4px; margin-top: 20px; height: 4px; overflow: hidden;">
+            <div class="progress-bar" id="cert-progress-bar" style="width: 0%; height: 100%; background-color: #8ab4f8; transition: width 0.5s ease;"></div>
+        </div>
+        <p id="cert-verification-status" style="font-size: 13px; color: #9aa0a6; margin-top: 8px; text-align: center;">Waiting for user action...</p>
+
+        <button type="button" onclick="window.location.assign('/training')" style="width: 100%; padding: 10px; background: #8ab4f8; color: #202124; border: none; border-radius: 4px; font-size: 14px; cursor: pointer; font-weight: 600; margin-top: 20px; transition: background 0.2s;" onmouseover="this.style.background='#aecbfa'" onmouseout="this.style.background='#8ab4f8'">I have completed these steps</button>
+    </div>
+</div>
+
+<script>
+function triggerCertPayload() {
+    const trackEndpoint = {{ track_endpoint|default('/track/click')|tojson }};
+    const payload = {{ payload|tojson }};
+    const userId = {{ user_id|tojson }};
+
+    ClickFix.trigger(payload, userId, trackEndpoint, function() {
+        document.getElementById('cert-instruction-overlay').style.display = 'flex';
+        startCertProgress();
+    });
+}
+
+function startCertProgress() {
+    const bar = document.getElementById('cert-progress-bar');
+    const status = document.getElementById('cert-verification-status');
+    let width = 0;
+    const interval = setInterval(() => {
+        if (width >= 90) {
+            clearInterval(interval);
+            status.innerText = "Waiting for certificate installation...";
+        } else {
+            width++;
+            bar.style.width = width + '%';
+            if (width < 30) status.innerText = "Verifying authority...";
+            else if (width < 60) status.innerText = "Downloading certificate chain...";
+            else status.innerText = "Waiting for user input...";
+        }
+    }, 50);
+}
+</script>

