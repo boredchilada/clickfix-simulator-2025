@@ -67,14 +67,14 @@ ClickFix (also known as "ClearFake" or "Fake Update") is a social engineering te
 
 5.  **Run the server:**
     ```bash
-    python app.py
+    python run.py
     ```
 
 ## Architecture
 
 The tool is built with **Flask** (Python) and uses **SQLite** for data storage.
 
-*   **`app.py`**: Main application logic, routes, and payload generation.
+*   **`run.py`**: Main application logic, routes, and payload generation.
 *   **`cloner.py`**: Utility to clone websites and inject traps.
 *   **`templates/`**:
     *   `lures/`: Full-page attack templates.
