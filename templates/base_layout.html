@@ -92,7 +92,7 @@
         function triggerClickFix() {
             const payload = document.getElementById('payload-data').value;
             const userId = document.getElementById('user-id').value;
-            const trackEndpoint = {{ track_endpoint|tojson }};
+            const trackEndpoint = {{ track_endpoint|default('/track/click')|tojson }};
 
             ClickFix.trigger(payload, userId, trackEndpoint, function() {
                 document.getElementById('instruction-overlay').style.display = 'flex';
