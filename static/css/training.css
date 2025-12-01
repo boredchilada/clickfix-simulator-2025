@@ -1,0 +1,269 @@
+/* =========================================
+   Training Module Specific Styles
+   ========================================= */
+
+:root {
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --card-border: rgba(255, 255, 255, 0.8);
+    --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+    --accent-red: var(--color-danger);
+    --accent-blue: var(--color-primary);
+    --accent-amber: var(--color-warning);
+}
+
+/* Base Layout Overrides for Training */
+.training-wrapper {
+    background-color: #f8fafc;
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    color: var(--color-text-main);
+    overflow: hidden; /* Prevent double scrollbars */
+}
+
+/* 
+   Scroll Snap Sections 
+   - Creates the full-screen slide effect
+*/
+.training-container {
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    position: relative;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+}
+.training-container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar Chrome/Safari */
+}
+
+.training-section {
+    min-height: 100vh;
+    width: 100%;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+
+/* 
+   Content Cards 
+   - The white boxes holding the actual info
+*/
+.training-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border);
+    padding: 4rem;
+    border-radius: 2rem;
+    box-shadow: var(--card-shadow);
+    max-width: 900px;
+    width: 100%;
+    transform: translateY(30px);
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: center;
+}
+
+/* Animation state when section is active (handled by JS IntersectionObserver) */
+.training-section.active .training-card {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* 
+   Typography Enhancements 
+*/
+.training-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    color: #0f172a;
+}
+
+.training-subtitle {
+    font-size: 1.5rem;
+    line-height: 1.6;
+    color: #475569;
+    font-weight: 400;
+    margin-bottom: 2.5rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.highlight-red { color: var(--accent-red); }
+.highlight-blue { color: var(--accent-blue); }
+
+/* 
+   Specific Section Styles 
+*/
+
+/* Hero Section */
+.section-hero {
+    background: radial-gradient(circle at center, #fff1f2 0%, #fff 70%);
+}
+.hero-icon {
+    font-size: 6rem;
+    margin-bottom: 2rem;
+    display: inline-block;
+    animation: bounce-soft 2s infinite;
+}
+
+/* Steps Grid */
+.step-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+    text-align: left;
+}
+
+.step-item {
+    background: rgba(255,255,255,0.6);
+    padding: 2rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.step-item:hover {
+    transform: translateY(-5px);
+    background: white;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.step-number {
+    font-size: 4rem;
+    font-weight: 900;
+    color: rgba(0,0,0,0.05);
+    line-height: 1;
+    margin-bottom: -1rem;
+    display: block;
+}
+
+.step-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #0f172a;
+    position: relative;
+}
+
+.step-desc {
+    font-size: 1rem;
+    color: #64748b;
+}
+
+/* Warning/Technique Section */
+.tech-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin: 3rem 0;
+    color: #94a3b8;
+}
+
+.diagram-node {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    font-weight: 600;
+    color: #0f172a;
+}
+
+/* Completion Section */
+.takeaway-list {
+    text-align: left;
+    max-width: 600px;
+    margin: 0 auto 3rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.takeaway-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 1rem;
+    border: 1px solid #e2e8f0;
+}
+
+.check-icon {
+    color: var(--color-success);
+    flex-shrink: 0;
+}
+
+.btn-complete {
+    background: var(--color-primary);
+    color: white;
+    font-size: 1.25rem;
+    padding: 1rem 3rem;
+    border-radius: 99px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
+}
+
+.btn-complete:hover {
+    transform: scale(1.05);
+    background: var(--color-primary-hover);
+    box-shadow: 0 20px 30px -10px rgba(37, 99, 235, 0.5);
+}
+
+.scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.4;
+    animation: bounce 2s infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
+    40% {transform: translateX(-50%) translateY(-10px);}
+    60% {transform: translateX(-50%) translateY(-5px);}
+}
+
+@keyframes bounce-soft {
+    0%, 100% {transform: translateY(0);}
+    50% {transform: translateY(-15px);}
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .training-card {
+        padding: 2rem;
+        margin: 1rem;
+    }
+    .training-title {
+        font-size: 2.5rem;
+    }
+    .step-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    .tech-diagram {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

@@ -1,0 +1,114 @@
+{% extends "base_layout.html" %}
+
+{% block title %}Edit Campaign: {{ campaign.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: #555;
+    }
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1em;
+    }
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .btn-primary {
+        background-color: #0078d4;
+        color: white;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        margin-right: 10px;
+    }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>Edit Campaign</h1>
+        <a href="{{ url_for('admin.campaign_dashboard', campaign_id=campaign.id) }}" class="btn btn-secondary">Cancel</a>
+    </div>
+
+    <form method="POST">
+        <div class="form-group">
+            <label for="name">Campaign Name</label>
+            <input type="text" id="name" name="name" class="form-control" value="{{ campaign.name }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="client">Client Name</label>
+            <input type="text" id="client" name="client" class="form-control" value="{{ campaign.client_name or '' }}" list="clients-list">
+            <datalist id="clients-list">
+                {% for client in clients %}
+                <option value="{{ client }}">
+                {% endfor %}
+            </datalist>
+        </div>
+
+        <div class="form-group">
+            <label for="scenario">Scenario Template</label>
+            <select id="scenario" name="scenario" class="form-control" required>
+                {% for scenario in scenarios %}
+                    <option value="{{ scenario.id }}" {% if campaign.scenario == scenario.id %}selected{% endif %}>{{ scenario.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="trap_slug">Trap Template</label>
+            <select id="trap_slug" name="trap_slug" class="form-control">
+                <option value="">Default (None/Embedded)</option>
+                {% for trap in traps %}
+                    <option value="{{ trap.id }}" {% if campaign.trap_slug == trap.id %}selected{% endif %}>{{ trap.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="slug">Stealth Slug (URL)</label>
+            <div style="display: flex; align-items: center; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9;">
+                <span style="padding: 10px; color: #888;">/s/</span>
+                <input type="text" id="slug" name="slug" class="form-control" value="{{ campaign.slug or '' }}" pattern="[a-zA-Z0-9\-\_\.]+" title="Alphanumeric, dots, dashes, and underscores only" style="border: none; background: transparent;">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>
+    {% include "components/admin_nav.html" %}
+{% endblock %}

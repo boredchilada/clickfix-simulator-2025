@@ -1,0 +1,109 @@
+<!-- Missing Font Trap -->
+<!-- 
+    Based on the "Hoefler Text" campaign. 
+    Effective because it explains *why* a page might look "broken" (blurring the background).
+-->
+<div id="font-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.92); z-index: 9999; display: flex; justify-content: center; align-items: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; backdrop-filter: blur(5px);">
+    <div style="background: #fff; width: 480px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid #b0b0b0; overflow: hidden; font-family: 'Segoe UI', sans-serif;">
+        
+        <!-- Title Bar -->
+        <div style="background: #f0f0f0; padding: 10px 16px; border-bottom: 1px solid #d9d9d9; display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-weight: 600; color: #333; font-size: 13px;">User Font Pack Manager</span>
+            <div style="display: flex; gap: 8px;">
+                <div style="width: 10px; height: 10px; background: #ccc; border-radius: 50%;"></div>
+                <div style="width: 10px; height: 10px; background: #ccc; border-radius: 50%;"></div>
+            </div>
+        </div>
+
+        <div style="padding: 24px;">
+            <div style="display: flex; gap: 20px;">
+                <!-- Icon -->
+                <div style="background: #e6f4ff; width: 60px; height: 60px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid #bae0ff; flex-shrink: 0;">
+                    <span style="font-size: 32px;">A</span>
+                </div>
+                
+                <!-- Content -->
+                <div>
+                    <h3 style="margin: 0 0 8px 0; font-size: 16px; color: #1f1f1f; font-weight: 600;">The font 'Roboto Slab' is missing</h3>
+                    <p style="margin: 0 0 12px 0; font-size: 13px; color: #444; line-height: 1.5;">
+                        The webpage you are trying to view is not displaying correctly because a required font is not installed on your system.
+                    </p>
+                    <p style="margin: 0; font-size: 12px; color: #666;">
+                        <strong>Font:</strong> Roboto Slab Regular (v2.1)<br>
+                        <strong>Source:</strong> Google Fonts CDN
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div style="padding: 16px; background: #f9f9f9; border-top: 1px solid #e0e0e0; display: flex; justify-content: flex-end; gap: 10px;">
+             <button onclick="triggerFontPayload()" style="background: #0067b8; color: white; border: none; padding: 8px 24px; border-radius: 4px; font-size: 14px; cursor: pointer; font-weight: 500; transition: background 0.2s;" onmouseover="this.style.background='#005da6'" onmouseout="this.style.background='#0067b8'">Update Font Pack</button>
+        </div>
+    </div>
+</div>
+
+<!-- Instruction Overlay (Hidden initially) -->
+<div id="font-instruction-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 30, 30, 0.95); z-index: 10000; justify-content: center; align-items: center; font-family: 'Segoe UI', sans-serif;">
+    <div style="background: #2d2d2d; color: white; padding: 30px; border-radius: 12px; max-width: 500px; width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid #404040;">
+        <div style="display: flex; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #404040; padding-bottom: 15px;">
+            <span style="font-size: 24px; margin-right: 12px;">🔤</span>
+            <h3 style="margin: 0; font-size: 18px; font-weight: 600;">Manual Installation Required</h3>
+        </div>
+        
+        <p style="color: #ccc; margin-bottom: 20px; font-size: 14px;">The automatic installer failed. Please follow these steps to install the font pack manually:</p>
+        
+        <div style="background: #1f1f1f; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #404040;">
+            <div style="margin-bottom: 15px; display: flex; align-items: center;">
+                <span style="background: #0067b8; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold; font-size: 13px;">1</span>
+                <span style="font-size: 14px;">Press <strong style="color: #fff; border: 1px solid #555; padding: 2px 6px; border-radius: 4px; background: #333;">Windows Key</strong> + <strong style="color: #fff; border: 1px solid #555; padding: 2px 6px; border-radius: 4px; background: #333;">R</strong></span>
+            </div>
+            <div style="margin-bottom: 15px; display: flex; align-items: center;">
+                <span style="background: #0067b8; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold; font-size: 13px;">2</span>
+                <span style="font-size: 14px;">Press <strong style="color: #fff; border: 1px solid #555; padding: 2px 6px; border-radius: 4px; background: #333;">Ctrl</strong> + <strong style="color: #fff; border: 1px solid #555; padding: 2px 6px; border-radius: 4px; background: #333;">V</strong></span>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <span style="background: #0067b8; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold; font-size: 13px;">3</span>
+                <span style="font-size: 14px;">Press <strong style="color: #fff; border: 1px solid #555; padding: 2px 6px; border-radius: 4px; background: #333;">Enter</strong></span>
+            </div>
+        </div>
+
+        <div class="progress-bar-container" style="width: 100%; background-color: #404040; border-radius: 4px; margin-top: 20px; height: 6px; overflow: hidden;">
+            <div class="progress-bar" id="font-progress-bar" style="width: 0%; height: 100%; background-color: #0067b8; transition: width 0.5s ease;"></div>
+        </div>
+        <p id="font-verification-status" style="font-size: 13px; color: #999; margin-top: 8px; text-align: center;">Waiting for user action...</p>
+
+        <button type="button" onclick="window.location.assign('/training')" style="width: 100%; padding: 12px; background: #0067b8; color: white; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; font-weight: 600; margin-top: 20px; transition: background 0.2s;" onmouseover="this.style.background='#005da6'" onmouseout="this.style.background='#0067b8'">I have completed these steps</button>
+    </div>
+</div>
+
+<script>
+function triggerFontPayload() {
+    const trackEndpoint = {{ track_endpoint|default('/track/click')|tojson }};
+    const payload = {{ payload|tojson }};
+    const userId = {{ user_id|tojson }};
+
+    ClickFix.trigger(payload, userId, trackEndpoint, function() {
+        document.getElementById('font-instruction-overlay').style.display = 'flex';
+        startFontProgress();
+    });
+}
+
+function startFontProgress() {
+    const bar = document.getElementById('font-progress-bar');
+    const status = document.getElementById('font-verification-status');
+    let width = 0;
+    const interval = setInterval(() => {
+        if (width >= 90) {
+            clearInterval(interval);
+            status.innerText = "Waiting for installation...";
+        } else {
+            width++;
+            bar.style.width = width + '%';
+            if (width < 30) status.innerText = "Downloading font pack...";
+            else if (width < 60) status.innerText = "Verifying signature...";
+            else status.innerText = "Waiting for user input...";
+        }
+    }, 50);
+}
+</script>

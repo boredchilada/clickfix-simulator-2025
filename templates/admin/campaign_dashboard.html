@@ -1,0 +1,208 @@
+{% extends "base_layout.html" %}
+
+{% block title %}Campaign: {{ campaign.name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/timeline.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1>{{ campaign.name }}</h1>
+            <p class="text-muted">
+                <strong>Scenario:</strong> {{ campaign.scenario }} |
+                <strong>Created:</strong> {{ campaign.created_at.strftime('%Y-%m-%d') }}
+            </p>
+        </div>
+        <div class="flex gap-2">
+            <a href="{{ url_for('admin.edit_campaign', campaign_id=campaign.id) }}" class="btn btn-outline">Edit Campaign</a>
+            <a href="{{ url_for('admin.export_csv', campaign_id=campaign.id) }}" class="btn btn-outline">Export CSV</a>
+            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-primary">Main Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Filter Panel -->
+    <div class="filter-panel">
+        <div class="filter-row">
+            <div class="filter-group">
+                <label>Date Range</label>
+                <div class="date-range-presets">
+                    <button class="preset-btn" data-range="1">24h</button>
+                    <button class="preset-btn" data-range="7">7d</button>
+                    <button class="preset-btn active" data-range="30">30d</button>
+                    <button class="preset-btn" data-range="90">90d</button>
+                    <button class="preset-btn" data-range="custom">Custom</button>
+                </div>
+            </div>
+            <div class="filter-group" id="custom-date-range" style="display: none;">
+                <label>Custom Range</label>
+                <div class="flex gap-2">
+                    <input type="date" id="start-date" class="form-control">
+                    <span style="align-self: center;">to</span>
+                    <input type="date" id="end-date" class="form-control">
+                </div>
+            </div>
+            <div class="filter-group">
+                <label>Interval</label>
+                <select id="interval-select" class="form-control form-select">
+                    <option value="hour">Hourly</option>
+                    <option value="day" selected>Daily</option>
+                    <option value="week">Weekly</option>
+                </select>
+            </div>
+        </div>
+        <div class="filter-row" style="margin-top: var(--spacing-md);">
+            <div class="filter-group">
+                <label>Event Types</label>
+                <div class="event-type-filters">
+                    <span class="event-type-chip page-view active" data-type="PAGE_VIEW">
+                        <span class="legend-color page-view"></span> Page Views
+                    </span>
+                    <span class="event-type-chip button-click active" data-type="BUTTON_CLICK">
+                        <span class="legend-color button-click"></span> Clicks
+                    </span>
+                    <span class="event-type-chip payload-executed active" data-type="PAYLOAD_EXECUTED">
+                        <span class="legend-color payload-executed"></span> Executions
+                    </span>
+                    <span class="event-type-chip training active" data-type="TRAINING_COMPLETED,TRAINING_ACKNOWLEDGED,TRAINING_VIEWED">
+                        <span class="legend-color training"></span> Training
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timeline Chart -->
+    <div class="timeline-container" id="timeline-container">
+        <div class="timeline-header">
+            <h3 class="timeline-title">Event Timeline</h3>
+            <div class="timeline-controls">
+                <span id="timeline-range-label" class="text-muted" style="font-size: 0.875rem;"></span>
+            </div>
+        </div>
+        <div class="timeline-wrapper">
+            <div class="timeline-y-axis" id="timeline-y-axis">
+                <!-- Y-axis labels will be rendered by JavaScript -->
+            </div>
+            <div class="timeline-chart" id="timeline-chart">
+                <!-- Bars will be rendered by JavaScript -->
+            </div>
+        </div>
+        <div class="timeline-labels" id="timeline-labels">
+            <!-- Labels will be rendered by JavaScript -->
+        </div>
+        <div class="timeline-legend">
+            <div class="legend-item" data-type="PAGE_VIEW">
+                <span class="legend-color page-view"></span>
+                <span>Page Views</span>
+            </div>
+            <div class="legend-item" data-type="BUTTON_CLICK">
+                <span class="legend-color button-click"></span>
+                <span>Clicks</span>
+            </div>
+            <div class="legend-item" data-type="PAYLOAD_EXECUTED">
+                <span class="legend-color payload-executed"></span>
+                <span>Executions</span>
+            </div>
+            <div class="legend-item" data-type="TRAINING">
+                <span class="legend-color training"></span>
+                <span>Training</span>
+            </div>
+        </div>
+        <div class="selection-info" id="selection-info">
+            <span id="selection-text"></span>
+            <span class="clear-selection" onclick="clearTimelineSelection()">Clear selection</span>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid" id="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number" id="stat-views">{{ stats.total_views }}</div>
+            <div class="stat-label">Page Views</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="stat-clicks" style="color: var(--color-warning);">{{ stats.total_clicks }}</div>
+            <div class="stat-label">Clicks (Copied)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="stat-executions" style="color: var(--color-danger);">{{ stats.total_executions }}</div>
+            <div class="stat-label">Executions (Compromised)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="stat-training" style="color: var(--color-success);">{{ stats.total_training_completed }}</div>
+            <div class="stat-label">Training Completed</div>
+        </div>
+    </div>
+
+    <!-- Event Log -->
+    <h2 class="mb-4">Event Log</h2>
+    <div class="table-container">
+        <table class="table" id="events-table">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>User ID</th>
+                    <th>Event Type</th>
+                    <th>Platform</th>
+                    <th>Source IP</th>
+                    <th>Hostname</th>
+                    <th>Username</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                <tr>
+                    <td style="white-space: nowrap;">{{ event.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    <td><code>{{ event.user_id }}</code></td>
+                    <td>
+                        {% if event.event_type == 'PAGE_VIEW' %}
+                            <span class="badge badge-blue">Viewed Page</span>
+                        {% elif event.event_type == 'BUTTON_CLICK' %}
+                            <span class="badge badge-amber">Clicked Fix</span>
+                        {% elif event.event_type == 'PAYLOAD_EXECUTED' %}
+                            <span class="badge badge-red">EXECUTED</span>
+                        {% elif event.event_type == 'TRAINING_VIEWED' %}
+                            <span class="badge badge-gray">Training Started</span>
+                        {% elif event.event_type == 'TRAINING_COMPLETED' %}
+                            <span class="badge badge-green">Training Viewed All</span>
+                        {% elif event.event_type == 'TRAINING_ACKNOWLEDGED' %}
+                            <span class="badge badge-green" style="background-color: #15803d;">Training Acknowledged</span>
+                        {% else %}
+                            {{ event.event_type }}
+                        {% endif %}
+                    </td>
+                    <td>{{ event.platform }}</td>
+                    <td>{{ event.source_ip }}</td>
+                    <td>{{ event.hostname or 'N/A' }}</td>
+                    <td>{{ event.username or 'N/A' }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-8">No events recorded for this campaign yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/timeline.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initialize dashboard with campaign ID pre-selected
+        initDashboard({
+            currentClient: '',
+            campaignId: {{ campaign.id }},
+            apiEndpoints: {
+                timeline: "{{ url_for('admin.api_timeline') }}",
+                stats: "{{ url_for('admin.api_stats') }}",
+                events: "{{ url_for('admin.api_events') }}"
+            }
+        });
+    });
+</script>
+    {% include "components/admin_nav.html" %}
+{% endblock %}

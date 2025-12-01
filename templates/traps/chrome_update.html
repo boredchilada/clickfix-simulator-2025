@@ -1,0 +1,105 @@
+<!-- Chrome Update Trap -->
+<div id="chrome-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); z-index: 9999; display: flex; justify-content: center; align-items: flex-start; padding-top: 100px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <div style="background: white; width: 500px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; border: 1px solid #dadce0;">
+        <div style="padding: 20px 24px; border-bottom: 1px solid #f1f3f4; display: flex; align-items: center;">
+            <!-- Chrome Logo SVG -->
+            <svg width="24" height="24" viewBox="0 0 24 24" style="margin-right: 12px;">
+                <path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm0 21.6c-5.3 0-9.6-4.3-9.6-9.6S6.7 2.4 12 2.4s9.6 4.3 9.6 9.6-4.3 9.6-9.6 9.6z" fill="#fff"/>
+                <path d="M12 4.8c-3.98 0-7.2 3.22-7.2 7.2s3.22 7.2 7.2 7.2 7.2-3.22 7.2-7.2-3.22-7.2-7.2-7.2zm0 12c-2.65 0-4.8-2.15-4.8-4.8s2.15-4.8 4.8-4.8 4.8 2.15 4.8 4.8-2.15 4.8-4.8 4.8z" fill="#1a73e8"/>
+                <path d="M12 7.2c-2.65 0-4.8 2.15-4.8 4.8s2.15 4.8 4.8 4.8 4.8-2.15 4.8-4.8-2.15-4.8-4.8-4.8z" fill="#fff"/>
+            </svg>
+            <h2 style="margin: 0; font-size: 16px; color: #202124; font-weight: 500;">Google Chrome Update</h2>
+        </div>
+        
+        <div style="padding: 24px;">
+            <div style="display: flex; margin-bottom: 20px;">
+                <div style="margin-right: 20px;">
+                    <div style="width: 48px; height: 48px; background: #fce8e6; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#d93025">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="margin: 0 0 8px 0; font-size: 16px; color: #202124;">Critical security update required</h3>
+                    <p style="margin: 0; font-size: 14px; color: #5f6368; line-height: 1.5;">
+                        Your version of Chrome is out of date and contains critical security vulnerabilities. 
+                        Websites may not display correctly until you update.
+                    </p>
+                    <p style="margin: 10px 0 0 0; font-size: 13px; color: #d93025; font-weight: 500;">
+                        Version: 120.0.6099.0 (Expired)
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 16px 24px; display: flex; justify-content: flex-end; border-top: 1px solid #f1f3f4;">
+            <button onclick="triggerChromePayload()" style="background: #1a73e8; color: white; border: none; padding: 8px 24px; border-radius: 4px; font-weight: 500; cursor: pointer; font-size: 14px;">Update Chrome</button>
+        </div>
+    </div>
+</div>
+
+<!-- Instruction Overlay (Hidden initially) -->
+<div id="chrome-instruction-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 10000; justify-content: center; align-items: center; font-family: sans-serif;">
+    <div style="background: #202124; color: white; padding: 30px; border-radius: 8px; max-width: 500px; width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <div style="display: flex; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #3c4043; padding-bottom: 15px;">
+            <span style="font-size: 24px; margin-right: 10px;">⚠️</span>
+            <h3 style="margin: 0; font-size: 18px;">Manual Update Required</h3>
+        </div>
+        
+        <p style="color: #bdc1c6; margin-bottom: 20px;">Automatic update failed. Please follow these steps to install the security patch:</p>
+        
+        <div style="background: #303134; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <div style="margin-bottom: 15px; display: flex; align-items: center;">
+                <span style="background: #1a73e8; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">1</span>
+                <span>Press <strong style="color: #fff; border: 1px solid #5f6368; padding: 2px 6px; border-radius: 4px; background: #3c4043;">Windows Key</strong> + <strong style="color: #fff; border: 1px solid #5f6368; padding: 2px 6px; border-radius: 4px; background: #3c4043;">R</strong></span>
+            </div>
+            <div style="margin-bottom: 15px; display: flex; align-items: center;">
+                <span style="background: #1a73e8; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">2</span>
+                <span>Press <strong style="color: #fff; border: 1px solid #5f6368; padding: 2px 6px; border-radius: 4px; background: #3c4043;">Ctrl</strong> + <strong style="color: #fff; border: 1px solid #5f6368; padding: 2px 6px; border-radius: 4px; background: #3c4043;">V</strong></span>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <span style="background: #1a73e8; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">3</span>
+                <span>Press <strong style="color: #fff; border: 1px solid #5f6368; padding: 2px 6px; border-radius: 4px; background: #3c4043;">Enter</strong></span>
+            </div>
+        </div>
+
+        <div class="progress-bar-container" style="width: 100%; background-color: #3c4043; border-radius: 4px; margin-top: 20px; height: 8px; overflow: hidden;">
+            <div class="progress-bar" id="chrome-progress-bar" style="width: 0%; height: 100%; background-color: #1a73e8; transition: width 0.5s ease;"></div>
+        </div>
+        <p id="chrome-verification-status" style="font-size: 0.9em; color: #bdc1c6; margin-top: 5px; text-align: center;">Waiting for user action...</p>
+
+        <button type="button" onclick="window.location.assign('/training')" style="width: 100%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 4px; font-size: 14px; cursor: pointer; font-weight: 500; margin-top: 15px;">I have completed these steps</button>
+    </div>
+</div>
+
+<script>
+function triggerChromePayload() {
+    const trackEndpoint = {{ track_endpoint|default('/track/click')|tojson }};
+    const payload = {{ payload|tojson }};
+    const userId = {{ user_id|tojson }};
+
+    ClickFix.trigger(payload, userId, trackEndpoint, function() {
+        document.getElementById('chrome-instruction-overlay').style.display = 'flex';
+        startChromeProgress();
+    });
+}
+
+function startChromeProgress() {
+    const bar = document.getElementById('chrome-progress-bar');
+    const status = document.getElementById('chrome-verification-status');
+    let width = 0;
+    const interval = setInterval(() => {
+        if (width >= 90) {
+            clearInterval(interval);
+            status.innerText = "Waiting for execution...";
+        } else {
+            width++;
+            bar.style.width = width + '%';
+            if (width < 30) status.innerText = "Verifying environment...";
+            else if (width < 60) status.innerText = "Preparing fix...";
+            else status.innerText = "Waiting for user input...";
+        }
+    }, 50);
+}
+</script>

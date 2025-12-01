@@ -1,0 +1,120 @@
+<!-- Admin Navigation Dock -->
+<div class="admin-dock-wrapper">
+    <!-- Campaign Switcher Popover -->
+    <div id="campaign-menu" class="popover-menu">
+        <div class="popover-header">Switch Campaign</div>
+        <div style="max-height: 300px; overflow-y: auto;">
+            {% if all_campaigns %}
+                {% for c in all_campaigns %}
+                <div class="popover-row {{ 'active' if campaign is defined and campaign and campaign.id == c.id else '' }}">
+                    <a href="{{ url_for('admin.campaign_dashboard', campaign_id=c.id) }}" class="popover-link">
+                        <span class="font-medium">{{ c.name }}</span>
+                        <span class="popover-meta">{{ c.client_name or 'No Client' }}</span>
+                    </a>
+                    <a href="{{ url_for('admin.edit_campaign', campaign_id=c.id) }}" class="popover-action" title="Quick Edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="popover-empty">No campaigns found</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <nav class="admin-dock">
+        <!-- Root / Generator -->
+        <a href="{{ url_for('main.index') }}" class="dock-item" data-tooltip="Generator">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        </a>
+
+        <!-- Dashboard -->
+        <a href="{{ url_for('admin.admin_dashboard') }}" class="dock-item {{ 'active' if request.endpoint == 'admin.admin_dashboard' and not request.hash else '' }}" data-tooltip="Dashboard">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </a>
+
+        <!-- Campaign Switcher Toggle -->
+        <button id="campaign-toggle" class="dock-item {{ 'active' if request.endpoint in ['admin.campaign_dashboard', 'admin.edit_campaign'] else '' }}" data-tooltip="Campaigns" onclick="toggleCampaignMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </button>
+        
+        <div class="dock-separator"></div>
+
+        <!-- Scroll Links (only work on dashboard, otherwise redirect) -->
+        {% if request.endpoint == 'admin.admin_dashboard' %}
+            <a href="#timeline-container" class="dock-item" data-tooltip="Timeline">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </a>
+            <a href="{{ url_for('admin.admin_dashboard', _anchor='active-campaigns') }}" class="dock-item" data-tooltip="All Campaigns">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4 8 4v14"/><path d="M17 21v-8H7v8"/></svg>
+            </a>
+        {% else %}
+             <a href="{{ url_for('admin.admin_dashboard', _anchor='timeline-container') }}" class="dock-item" data-tooltip="Timeline">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </a>
+        {% endif %}
+
+        <div class="dock-separator"></div>
+
+        <!-- New Campaign Action -->
+        <a href="{{ url_for('admin.admin_dashboard', _anchor='new-campaign-card') }}" class="dock-item dock-action" data-tooltip="New Campaign">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </a>
+        
+        <a href="{{ url_for('admin.export_csv', campaign_id=campaign.id) if campaign is defined and campaign else url_for('admin.export_csv') }}" class="dock-item" data-tooltip="Export CSV {{ '(Current)' if campaign is defined and campaign else '(All)' }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </a>
+
+        <div class="dock-separator"></div>
+
+        <!-- Minimize Toggle -->
+        <button id="dock-minimize-toggle" class="dock-item" data-tooltip="Minimize" onclick="toggleDock()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline></svg>
+        </button>
+    </nav>
+    
+    <!-- Minimized Trigger (Caret) -->
+    <button id="dock-trigger" class="dock-trigger" onclick="toggleDock()" title="Show Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+    </button>
+</div>
+
+<script>
+function toggleDock() {
+    const wrapper = document.querySelector('.admin-dock-wrapper');
+    const isMinimized = wrapper.classList.toggle('minimized');
+    
+    // Save state to localStorage
+    localStorage.setItem('adminDockMinimized', isMinimized);
+}
+
+// Restore state on load
+document.addEventListener('DOMContentLoaded', () => {
+    const isMinimized = localStorage.getItem('adminDockMinimized') === 'true';
+    if (isMinimized) {
+        document.querySelector('.admin-dock-wrapper').classList.add('minimized');
+    }
+});
+
+function toggleCampaignMenu() {
+    const menu = document.getElementById('campaign-menu');
+    const btn = document.getElementById('campaign-toggle');
+    menu.classList.toggle('open');
+    
+    // Close on click outside
+    if (menu.classList.contains('open')) {
+        setTimeout(() => {
+            document.addEventListener('click', closeMenuOutside);
+        }, 10);
+    }
+}
+
+function closeMenuOutside(e) {
+    const menu = document.getElementById('campaign-menu');
+    const btn = document.getElementById('campaign-toggle');
+    if (!menu.contains(e.target) && !btn.contains(e.target)) {
+        menu.classList.remove('open');
+        document.removeEventListener('click', closeMenuOutside);
+    }
+}
+</script>

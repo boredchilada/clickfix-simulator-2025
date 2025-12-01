@@ -1,0 +1,17 @@
+services:
+  clickfix:
+    build: .
+    ports:
+      - "443:443"
+    volumes:
+      - instance_data:/app/instance
+      - ./certs:/app/certs
+      - ./templates/lures/scenarios:/app/templates/lures/scenarios
+    env_file:
+      - .env
+    environment:
+      - FLASK_DEBUG=False
+    restart: unless-stopped
+
+volumes:
+  instance_data:
