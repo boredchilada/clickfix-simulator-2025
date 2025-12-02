@@ -123,22 +123,6 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for gu
 - ✅ Full event tracking and admin dashboard
 - ✅ Simple site cloner with trap injection
 
-### v1.1 - Enhanced Payloads
-- [ ] Multiple payload types (MSHTA, LOLBins)
-- [ ] Basic obfuscation options
-- [ ] macOS/Linux execution triggers
-
-### v1.2 - Configuration System
-- [ ] YAML-driven campaign configuration
-- [ ] Dynamic branding engine
-- [ ] Custom trap templates
-
-### v2.0 - Red Team Mode
-- [ ] Bot/crawler detection
-- [ ] Geofencing and IP targeting
-- [ ] DNS callback verification
-- [ ] Time-based campaign controls
-
 ## Known Limitations (v1.0)
 
 1. **Windows-Only Instructions**: The execution triggers (Win+R) are Windows-specific. macOS/Linux support planned for v1.1.
